@@ -1,0 +1,22 @@
+development:
+  clients:
+    default:
+      uri: <%= ENV["MONGO_ATLAS_DEV_URI"] %>
+      options:
+        server_selection_timeout: 5
+
+test:
+  clients:
+    default:
+      uri: <%= ENV["MONGO_ATLAS_TEST_URI"] %>
+      options:
+        read:
+          mode: :primary
+        max_pool_size: 1
+
+production:
+  clients:
+    default:
+      uri: <%= ENV["MONGO_ATLAS_PROD_URI"] %>
+      options:
+        connect_timeout: 15

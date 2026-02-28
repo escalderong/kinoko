@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  variant_group_name: MyString
+  variant_name: MyString
+  price_delta: 
+
+two:
+  variant_group_name: MyString
+  variant_name: MyString
+  price_delta: 
