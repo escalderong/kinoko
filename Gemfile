@@ -63,3 +63,9 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem "tailwindcss-rails", "~> 4.4"
+
+gem "foreman", "~> 0.90.0"
+
+gem "simple_enum", "~> 2.3", require: "simple_enum/mongoid"

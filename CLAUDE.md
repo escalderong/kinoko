@@ -91,3 +91,4 @@ Order → Tickets (subtotal/tax/tip: Money, status: open/paid)
 - Avoid changing denormalized data structures (e.g. OrderItem fields).
 - Prefer Turbo + Stimulus over custom JavaScript frameworks.
 - Do not introduce new gems without clear justification.
+- Do not use ViewComponents nor Presenters nor Draper, stick to Rails conventions, like partials and helpers (don't abuse helpers)

@@ -1,6 +1,7 @@
 class User
   include Mongoid::Document
   include Mongoid::Timestamps
+  include SimpleEnum::Mongoid
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
@@ -37,7 +38,7 @@ class User
 
   field :name, type: String
 
-  enum role: { owner: 0, admin: 1, waiter: 2 }
+  as_enum :role, { owner: 0, admin: 1, waiter: 2 }
 
   validates_presence_of :name
   validates_presence_of :role
