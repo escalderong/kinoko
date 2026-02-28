@@ -7,5 +7,6 @@ class TicketItem
   validates_presence_of :quantity
 
   belongs_to :ticket, optional: false
-  belongs_to :order_item, optional: false
+
+  embeds_one :order_item
 end

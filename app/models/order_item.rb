@@ -16,4 +16,6 @@ class OrderItem
 
   has_many :order_item_variants
   has_many :order_item_modifiers
+
+  embedded_in :ticket_item
 end
