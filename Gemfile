@@ -36,7 +36,7 @@ gem "thruster", require: false
 
 gem "dotenv-rails", "~> 3.2.0"
 
-gem "devise", "~> 5.0.2"
+gem "devise", "~> 5.0.3"
 
 gem "pundit", "~> 2.5.2"
 
