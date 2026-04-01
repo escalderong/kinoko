@@ -1,6 +1,6 @@
 require "test_helper"
 
-class TicketItemTest < ActiveSupport::TestCase
+class CheckItemTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

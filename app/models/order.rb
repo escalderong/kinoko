@@ -13,5 +13,5 @@ class Order
   belongs_to :table, optional: false
 
   has_many :order_items
-  has_many :tickets
+  has_many :checks
 end

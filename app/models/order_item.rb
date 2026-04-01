@@ -10,12 +10,16 @@ class OrderItem
 
   validates_presence_of :base_price
   validates_presence_of :product_name
-  validates_presence_of :quantity
+
+  validates :quantity, presence: true, numericality: { greater_than: 0 }
 
   belongs_to :order, optional: false
 
   has_many :order_item_variants
   has_many :order_item_modifiers
+  has_many :check_items
 
-  embedded_in :ticket_item
+  def complete_item_price
+    base_price + order_item_variants.sum(&:price_delta) + order_item_modifiers.sum(&:price_delta)
+  end
 end

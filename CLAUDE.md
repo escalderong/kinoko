@@ -46,7 +46,7 @@ Table → Orders (status: open/closed)
 Order → OrderItems (denormalized: stores product_name + base_price at time of order)
      │   ├── OrderItemVariants
      │   └── OrderItemModifiers
-Order → Tickets (subtotal/tax/tip: Money, status: open/paid)
+Order → Checks (subtotal/tax/tip: Money, status: open/paid)
 ```
 
 **OrderItem intentionally denormalizes product data** (stores `product_name` and `base_price` directly) so historical orders are not affected by future product changes.
@@ -92,3 +92,9 @@ Order → Tickets (subtotal/tax/tip: Money, status: open/paid)
 - Prefer Turbo + Stimulus over custom JavaScript frameworks.
 - Do not introduce new gems without clear justification.
 - Do not use ViewComponents nor Presenters nor Draper, stick to Rails conventions, like partials and helpers (don't abuse helpers)
+
+## Visual Style Guide
+
+- Every view should be constructed using only daisyUI
+- daisyUI documentation can be found at https://daisyui.com/docs/use/
+- The whole app is themed by each commerce, so only use semantic color utility classes (e.g. `bg-primary`, `text-secondary`) instead of constant colors, always based on daisyUI's theme system (https://daisyui.com/docs/colors/)

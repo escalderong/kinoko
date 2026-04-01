@@ -1,4 +1,4 @@
-class Ticket
+class Check
   include Mongoid::Document
   include Mongoid::Timestamps
   include SimpleEnum::Mongoid
