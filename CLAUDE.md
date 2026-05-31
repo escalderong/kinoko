@@ -7,10 +7,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```bash
 bin/setup                  # Install dependencies and start dev server
 bin/dev                    # Start development server (rails server)
-bin/rails test             # Run all tests
-bin/rails test test/path/to/test_file.rb  # Run a single test file
-bin/rails test:system      # Run system tests (uses Capybara + Selenium)
-bin/rails db:test:prepare  # Prepare test database
+bundle exec rspec          # Run all specs
+bundle exec rspec spec/path/to/spec_file.rb  # Run a single spec file
 bin/rubocop                # Lint (rubocop-rails-omakase style)
 bin/brakeman --no-pager    # Static security analysis
 bin/importmap audit        # JS dependency security scan
