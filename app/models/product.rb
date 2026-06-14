@@ -12,4 +12,5 @@ class Product
   belongs_to :product_category, optional: false
 
   has_many :variant_groups
+  has_many :modifier_groups
 end
