@@ -36,7 +36,7 @@ RSpec.describe App::NavigationHelper, type: :helper do
 
   describe "#menu_item_visible?" do
     let(:item_without_policy) do
-      App::NavigationHelper::MenuItem.new(label: :orders, path: :app_orders_path, icon: "list", policy: nil, submenu: nil)
+      App::NavigationHelper::MenuItem.new(label: :orders, path: :app_orders_path, policy: nil, submenu: nil)
     end
 
     it "returns true when the item has no policy" do
@@ -46,7 +46,7 @@ RSpec.describe App::NavigationHelper, type: :helper do
     context "when the item is gated by CommercePolicy#settings?" do
       let(:item) do
         App::NavigationHelper::MenuItem.new(
-          label: :settings, path: :app_settings_path, icon: "cog",
+          label: :settings, path: :app_settings_path,
           policy: [ commerce, :settings? ], submenu: nil
         )
       end
@@ -67,7 +67,7 @@ RSpec.describe App::NavigationHelper, type: :helper do
     context "when the item is gated by CommercePolicy#manage_users?" do
       let(:item) do
         App::NavigationHelper::MenuItem.new(
-          label: :users, path: :app_users_path, icon: "users",
+          label: :users, path: :app_users_path,
           policy: [ commerce, :manage_users? ], submenu: nil
         )
       end
