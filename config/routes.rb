@@ -33,6 +33,6 @@ Rails.application.routes.draw do
 
   unauthenticated do
     # Minimal placeholder: send guests to login. No marketing page in this change.
-    root to: redirect("/users/sign_in"), as: :unauthenticated_root
+    root to: redirect { |_params, _req| Rails.application.routes.url_helpers.new_user_session_path }, as: :unauthenticated_root
   end
 end

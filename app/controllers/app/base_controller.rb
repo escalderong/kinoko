@@ -3,7 +3,7 @@ module App
     include Pundit::Authorization
 
     before_action :authenticate_user!
-    before_action :set_locale
+    around_action :switch_locale
 
     layout "app"
 
@@ -11,8 +11,9 @@ module App
 
     private
 
-    def set_locale
-      I18n.locale = current_user&.locale.presence || I18n.default_locale
+    def switch_locale(&action)
+      locale = current_user&.locale.presence || I18n.default_locale
+      I18n.with_locale(locale, &action)
     end
 
     def user_not_authorized
