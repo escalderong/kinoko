@@ -25,6 +25,8 @@ RSpec.describe "App::Preferences", type: :request do
 
       expect(response).to have_http_status(:ok)
       expect(response.media_type).to eq(Mime[:turbo_stream].to_s)
+      expect(response.body).to include('<turbo-stream action="replace" target="modal">')
+      expect(response.body).to include('<turbo-stream action="refresh"')
       expect(user.reload.locale).to eq("es")
     end
 

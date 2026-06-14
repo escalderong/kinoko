@@ -1,5 +1,3 @@
-<%= turbo_stream.update "modal" do %>
-  <%= turbo_frame_tag "modal" %>
-<% end %>
+<%= turbo_stream.replace "modal", turbo_frame_tag("modal") %>
 
 <%= turbo_stream.action :refresh, "" %>
