@@ -55,5 +55,13 @@ RSpec.describe CommercePolicy do
       expect(resolved.to_a).to eq([ commerce ])
       expect(resolved.to_a).not_to include(other_commerce)
     end
+
+    context 'when the user is nil' do
+      it 'resolves to an empty scope' do
+        resolved = described_class.new(nil, Commerce.all).resolve
+
+        expect(resolved.to_a).to eq([])
+      end
+    end
   end
 end

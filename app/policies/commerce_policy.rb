@@ -15,7 +15,7 @@ class CommercePolicy < ApplicationPolicy
   class Scope < ApplicationPolicy::Scope
     def resolve
       # A user only ever sees their own commerce.
-      scope.where(id: user.commerce_id)
+      user.present? ? scope.where(id: user.commerce_id) : scope.none
     end
   end
 end
