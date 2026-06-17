@@ -1,0 +1,24 @@
+<%#
+  Recursive menu item partial.
+  Locals:
+    item: App::NavigationHelper::MenuItem
+%>
+<% if item.submenu.present? %>
+  <% visible_children = item.submenu.select { |child| menu_item_visible?(child, view: self) } %>
+  <% if visible_children.any? %>
+    <li>
+      <details>
+        <summary><%= t("app.nav.#{item.label}") %></summary>
+        <ul>
+          <% visible_children.each do |child| %>
+            <%= render "layouts/app/menu_item", item: child %>
+          <% end %>
+        </ul>
+      </details>
+    </li>
+  <% end %>
+<% elsif menu_item_visible?(item, view: self) %>
+  <li>
+    <%= link_to t("app.nav.#{item.label}"), send(item.path) %>
+  </li>
+<% end %>

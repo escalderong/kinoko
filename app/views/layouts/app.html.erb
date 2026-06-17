@@ -5,6 +5,8 @@
   </head>
 
   <body class="min-h-screen bg-base-100 text-base-content">
+    <%= render "layouts/app/navbar" %>
+
     <% if notice.present? %>
       <div class="alert alert-info"><%= notice %></div>
     <% end %>
@@ -15,5 +17,7 @@
     <main class="container mx-auto p-4">
       <%= yield %>
     </main>
+
+    <%= turbo_frame_tag "modal" %>
   </body>
 </html>

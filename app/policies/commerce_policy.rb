@@ -1,4 +1,11 @@
 class CommercePolicy < ApplicationPolicy
+  # Maps App::PlaceholdersController section params (and the matching
+  # navbar MenuItem entries) to the policy action that gates access.
+  SECTION_AUTHORIZATIONS = {
+    "settings" => :settings?,
+    "users" => :manage_users?
+  }.freeze
+
   # Settings & user management are owner-only.
   def settings?     = owner?
   def manage_users? = owner?

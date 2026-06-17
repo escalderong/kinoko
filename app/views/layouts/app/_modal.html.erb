@@ -1,0 +1,14 @@
+<%#
+  Shared modal shell. Feature controllers render their content with
+  `layout: "layouts/app/modal"` (or `render layout:`) to target the
+  `modal` Turbo Frame and have it displayed as a daisyUI dialog.
+  Each feature is responsible for providing its own close action
+  (e.g. a Turbo Stream that replaces this frame with an empty one).
+%>
+<%= turbo_frame_tag "modal" do %>
+  <dialog class="modal modal-open">
+    <div class="modal-box">
+      <%= yield %>
+    </div>
+  </dialog>
+<% end %>
