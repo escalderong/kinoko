@@ -27,44 +27,44 @@
 #       "yes": yup
 #       enabled: "ON"
 
-en:
-  hello: "Hello world"
+es:
+  hello: "Hola mundo"
   app:
-    coming_soon: "This section is coming soon."
+    coming_soon: "Esta sección estará disponible próximamente."
     nav:
-      orders: "Orders"
-      tables: "Tables"
-      products: "Products"
-      product_categories: "Categories"
-      product_variants: "Variants"
-      product_modifiers: "Modifiers"
-      settings: "Settings"
-      users: "Users"
-      preferences: "Preferences"
-      logout: "Log out"
+      orders: "Pedidos"
+      tables: "Mesas"
+      products: "Productos"
+      product_categories: "Categorías"
+      product_variants: "Variantes"
+      product_modifiers: "Modificadores"
+      settings: "Ajustes"
+      users: "Usuarios"
+      preferences: "Preferencias"
+      logout: "Cerrar sesión"
     modal:
-      close: "Close"
+      close: "Cerrar"
     preferences:
-      title: "Preferences"
-      language: "Language"
-      save: "Save"
+      title: "Preferencias"
+      language: "Idioma"
+      save: "Guardar"
       locales:
-        en: "English"
-        es: "Spanish"
+        en: "Inglés"
+        es: "Español"
     sections:
       orders:
-        title: "Orders"
+        title: "Pedidos"
       tables:
-        title: "Tables"
+        title: "Mesas"
       product_categories:
-        title: "Categories"
+        title: "Categorías"
       product_variants:
-        title: "Variants"
+        title: "Variantes"
       product_modifiers:
-        title: "Modifiers"
+        title: "Modificadores"
       settings:
-        title: "Settings"
+        title: "Ajustes"
       users:
-        title: "Users"
+        title: "Usuarios"
     errors:
-      not_authorized: "You are not allowed to do that."
+      not_authorized: "No tienes permiso para realizar esta acción."

@@ -10,6 +10,29 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
+  namespace :app, module: "app" do
+    # Each section is a placeholder served by a single generic controller.
+    # Distinct named path helpers (app_orders_path, app_tables_path, ...) all
+    # map to PlaceholdersController#show via `defaults: { section: ... }`.
+    get "orders",              to: "placeholders#show", as: :orders,              defaults: { section: "orders" }
+    get "tables",              to: "placeholders#show", as: :tables,              defaults: { section: "tables" }
+    get "products/categories", to: "placeholders#show", as: :product_categories, defaults: { section: "product_categories" }
+    get "products/variants",   to: "placeholders#show", as: :product_variants,   defaults: { section: "product_variants" }
+    get "products/modifiers",  to: "placeholders#show", as: :product_modifiers,  defaults: { section: "product_modifiers" }
+    get "settings",            to: "placeholders#show", as: :settings,            defaults: { section: "settings" }
+    get "users",               to: "placeholders#show", as: :users,              defaults: { section: "users" }
+
+    # Preferences modal (locale switcher) — singular resource scoped to current_user.
+    resource :preferences, only: %i[edit update], controller: "preferences"
+  end
+
   # Defines the root path route ("/")
-  root to: "home#index"
+  authenticated :user do
+    root to: redirect("/app/orders"), as: :authenticated_root
+  end
+
+  unauthenticated do
+    # Minimal placeholder: send guests to login. No marketing page in this change.
+    root to: redirect { |_params, _req| Rails.application.routes.url_helpers.new_user_session_path }, as: :unauthenticated_root
+  end
 end

@@ -3,6 +3,7 @@ class Commerce
   include Mongoid::Timestamps
 
   field :name, type: String
+  field :theme, type: String, default: "light"
 
   validates_presence_of :name
 

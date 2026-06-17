@@ -5,5 +5,9 @@ FactoryBot.define do
     email { "john@example.com" }
     password { "password123" }
     role { :owner }
+
+    trait :waiter do
+      role { :waiter }
+    end
   end
 end
