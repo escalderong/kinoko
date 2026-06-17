@@ -78,6 +78,7 @@ GEM
     base64 (0.3.0)
     bcrypt (3.1.21)
     bcrypt_pbkdf (1.1.2)
+    bcrypt_pbkdf (1.1.2-arm64-darwin)
     benchmark (0.5.0)
     bigdecimal (4.0.1)
     bindex (0.8.1)
@@ -217,6 +218,8 @@ GEM
       net-protocol
     net-ssh (7.3.0)
     nio4r (2.7.5)
+    nokogiri (1.19.1-arm64-darwin)
+      racc (~> 1.4)
     nokogiri (1.19.1-x86_64-linux-gnu)
       racc (~> 1.4)
     orm_adapter (0.5.0)
@@ -364,8 +367,10 @@ GEM
     tailwindcss-rails (4.4.0)
       railties (>= 7.0.0)
       tailwindcss-ruby (~> 4.0)
+    tailwindcss-ruby (4.2.0-arm64-darwin)
     tailwindcss-ruby (4.2.0-x86_64-linux-gnu)
     thor (1.5.0)
+    thruster (0.1.18-arm64-darwin)
     thruster (0.1.18-x86_64-linux)
     timeout (0.6.0)
     tsort (0.2.0)
@@ -395,6 +400,7 @@ GEM
     zeitwerk (2.7.5)
 
 PLATFORMS
+  arm64-darwin-25
   x86_64-linux
 
 DEPENDENCIES
