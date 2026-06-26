@@ -17,7 +17,7 @@ module App
     end
 
     def user_not_authorized
-      flash[:alert] = t("app.errors.not_authorized")
+      flash[:error] = t("app.errors.not_authorized")
       redirect_back fallback_location: app_orders_path
     end
   end

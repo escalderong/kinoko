@@ -11,6 +11,8 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   namespace :app, module: "app" do
+    root to: "home#show"
+
     # Each section is a placeholder served by a single generic controller.
     # Distinct named path helpers (app_orders_path, app_tables_path, ...) all
     # map to PlaceholdersController#show via `defaults: { section: ... }`.

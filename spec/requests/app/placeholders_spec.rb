@@ -31,7 +31,7 @@ RSpec.describe "App::Placeholders", type: :request do
         get "/app/settings"
 
         expect(response).to redirect_to(app_orders_path)
-        expect(flash[:alert]).to eq(I18n.t("app.errors.not_authorized"))
+        expect(flash[:error]).to eq(I18n.t("app.errors.not_authorized"))
       end
     end
 
@@ -56,7 +56,7 @@ RSpec.describe "App::Placeholders", type: :request do
         get "/app/users"
 
         expect(response).to redirect_to(app_orders_path)
-        expect(flash[:alert]).to eq(I18n.t("app.errors.not_authorized"))
+        expect(flash[:error]).to eq(I18n.t("app.errors.not_authorized"))
       end
     end
 

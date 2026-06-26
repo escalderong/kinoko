@@ -23,6 +23,26 @@ RSpec.describe CommercePolicy do
     it 'permits edit?' do
       expect(policy.edit?).to be true
     end
+
+    it 'permits view_orders?' do
+      expect(policy.view_orders?).to be true
+    end
+
+    it 'permits view_products?' do
+      expect(policy.view_products?).to be true
+    end
+  end
+
+  context 'when the user is an admin' do
+    let(:user) { build(:user, :admin, commerce: commerce) }
+
+    it 'permits view_orders?' do
+      expect(policy.view_orders?).to be true
+    end
+
+    it 'permits view_products?' do
+      expect(policy.view_products?).to be true
+    end
   end
 
   context 'when the user is a waiter' do
@@ -42,6 +62,14 @@ RSpec.describe CommercePolicy do
 
     it 'denies edit?' do
       expect(policy.edit?).to be false
+    end
+
+    it 'permits view_orders?' do
+      expect(policy.view_orders?).to be true
+    end
+
+    it 'denies view_products?' do
+      expect(policy.view_products?).to be false
     end
   end
 

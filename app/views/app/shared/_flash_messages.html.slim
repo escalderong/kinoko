@@ -1,0 +1,5 @@
+- app_flash_messages.each do |message, style|
+  div role="alert" data-controller="flash" class="alert #{style[:class]} alert-vertical sm:alert-horizontal transition-opacity duration-300"
+    svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="h-6 w-6 shrink-0 stroke-current"
+      path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="#{style[:icon]}"/
+    span = message

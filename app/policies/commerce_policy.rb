@@ -6,6 +6,9 @@ class CommercePolicy < ApplicationPolicy
   def update? = owner?
   def edit?   = update?
 
+  def view_orders?   = user.present?
+  def view_products? = user.present? && (user.owner? || user.admin?)
+
   private
 
   def owner?

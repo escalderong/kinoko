@@ -93,6 +93,6 @@ Order → Checks (subtotal/tax/tip: Money, status: open/paid)
 
 ## Visual Style Guide
 
-- Every view should be constructed using only daisyUI
+- Every view should be constructed using only daisyUI and its skill
 - daisyUI documentation can be found at https://daisyui.com/docs/use/
 - The whole app is themed by each commerce, so only use semantic color utility classes (e.g. `bg-primary`, `text-secondary`) instead of constant colors, always based on daisyUI's theme system (https://daisyui.com/docs/colors/)

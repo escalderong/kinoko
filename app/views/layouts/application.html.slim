@@ -1,0 +1,12 @@
+doctype html
+html
+  head
+    = render "layouts/head"
+
+    / Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!)
+    / = tag.link rel: "manifest", href: pwa_manifest_path(format: :json)
+
+  body
+    = render "app/shared/flash_messages"
+
+    = yield

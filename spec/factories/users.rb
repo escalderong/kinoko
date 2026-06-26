@@ -9,5 +9,9 @@ FactoryBot.define do
     trait :waiter do
       role { :waiter }
     end
+
+    trait :admin do
+      role { :admin }
+    end
   end
 end

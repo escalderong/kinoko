@@ -1,0 +1,13 @@
+doctype html
+html data-theme="#{current_user&.commerce&.theme || 'light'}"
+  head
+    = render "layouts/head"
+
+  body class="min-h-screen bg-base-100 text-base-content"
+    = render "app/shared/navbar"
+
+    div class="container mx-auto px-4 pt-4 flex flex-col gap-2"
+      = render "app/shared/flash_messages"
+
+    main class="container mx-auto p-4"
+      = yield
