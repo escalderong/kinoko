@@ -1,0 +1,2 @@
+class FloorZonePolicy < OwnerOnlyPolicy
+end

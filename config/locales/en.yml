@@ -66,5 +66,24 @@ en:
         title: "Settings"
       users:
         title: "Users"
+    tables:
+      new_table: "New table"
+      edit_table: "Edit table"
+      number: "Number"
+      capacity: "Capacity"
+      save: "Save"
+      cancel: "Cancel"
+      create: "Create"
+      delete_confirm: "Delete this table?"
+      empty_tables: "No tables yet — add one."
+    zones:
+      no_zones: "No zones yet. Create your first one."
+      new_zone: "New zone"
+      create: "Create"
+      rename_zone: "Rename zone"
+      name: "Name"
+      save: "Save"
+      cancel: "Cancel"
+      delete_confirm: "Delete this zone and all its tables?"
     errors:
       not_authorized: "You are not allowed to do that."

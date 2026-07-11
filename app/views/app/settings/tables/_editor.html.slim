@@ -1,0 +1,71 @@
+- cell = App::TablesHelper::GRID_CELL_PX
+div data-controller="zones"
+  - if @zones.empty?
+    div class="card bg-base-100 border border-base-300 shadow-sm max-w-md mx-auto mt-10" data-test="no-zones"
+      div class="card-body items-center text-center"
+        p class="text-base-content/70" = t("app.zones.no_zones")
+        div class="card-actions"
+          button type="button" class="btn btn-primary btn-sm" onclick="new_zone_modal.showModal()"
+            = icon("plus", css_class: "h-4 w-4")
+            = t("app.zones.new_zone")
+  - else
+    div class="flex flex-wrap items-center justify-between gap-2 mb-3"
+      div class="flex items-center gap-2"
+        ul class="menu menu-horizontal menu-sm bg-base-200 rounded-box"
+          - @zones.each do |zone|
+            li
+              button type="button" class=(zone == @active_zone ? "menu-active" : nil) data-zones-target="tab" data-zone-id=zone.id.to_s data-action="click->zones#switch"
+                = zone.name
+        button type="button" class="btn btn-ghost btn-sm" onclick="new_zone_modal.showModal()"
+          = icon("plus", css_class: "h-4 w-4")
+
+      button type="button" class="btn btn-primary btn-sm" onclick="new_table_modal.showModal()"
+        = icon("plus", css_class: "h-4 w-4")
+        = t("app.tables.new_table")
+
+    - @zones.each do |zone|
+      - zone_tables = @tables_by_zone[zone.id] || []
+      div data-zones-target="panel" data-zone-id=zone.id.to_s class="floor-plan-panel #{'hidden' unless zone == @active_zone}"
+        div class="flex items-center justify-end gap-2 mb-2"
+          button type="button" class="btn btn-ghost btn-sm" onclick="rename_zone_#{zone.id}_modal.showModal()"
+            = icon("pencil", css_class: "h-4 w-4")
+          = button_to app_settings_floor_zone_path(zone), method: :delete, class: "btn btn-ghost btn-sm text-error", form: { class: "contents", data: { turbo_confirm: t("app.zones.delete_confirm") } } do
+            = icon("trash", css_class: "h-4 w-4")
+        div class="overflow-auto rounded-box border border-base-300 bg-base-100"
+          div data-controller="floor-plan" data-floor-plan-cell-value=cell class="floor-plan-canvas relative" style="min-height:60vh; width:100%; background-image: radial-gradient(circle, var(--color-base-300) 1px, transparent 1px); background-size: #{cell}px #{cell}px; background-position: -#{cell / 2}px -#{cell / 2}px;"
+            - zone_tables.each do |table|
+              = render "app/settings/tables/table", table: table
+            - if zone_tables.empty?
+              p class="p-4 text-base-content/60" = t("app.tables.empty_tables")
+
+        = render layout: "shared/modal", locals: { id: "rename_zone_#{zone.id}_modal", title: t("app.zones.rename_zone") } do
+          = form_with url: app_settings_floor_zone_path(zone), method: :patch do |f|
+            fieldset class="fieldset"
+              legend class="fieldset-legend" = t("app.zones.name")
+              = f.text_field "floor_zone[name]", value: zone.name, class: "input w-full", id: nil
+            div class="modal-action"
+              button type="submit" class="btn btn-primary" = t("app.zones.save")
+              button type="button" class="btn btn-ghost" onclick="rename_zone_#{zone.id}_modal.close()" = t("app.zones.cancel")
+
+    = render layout: "shared/modal", locals: { id: "new_table_modal", title: t("app.tables.new_table") } do
+      = form_with url: app_settings_tables_path, method: :post do |f|
+        = hidden_field_tag "table[floor_zone_id]", @active_zone.id, data: { zones_target: "floorZoneField" }
+        div class="flex flex-col gap-3"
+          fieldset class="fieldset"
+            legend class="fieldset-legend" = t("app.tables.number")
+            = f.number_field "table[number]", class: "input w-full", id: nil
+          fieldset class="fieldset"
+            legend class="fieldset-legend" = t("app.tables.capacity")
+            = f.number_field "table[capacity]", class: "input w-full", id: nil
+        div class="modal-action"
+          button type="submit" class="btn btn-primary" = t("app.tables.create")
+          button type="button" class="btn btn-ghost" onclick="new_table_modal.close()" = t("app.tables.cancel")
+
+  = render layout: "shared/modal", locals: { id: "new_zone_modal", title: t("app.zones.new_zone") } do
+    = form_with url: app_settings_floor_zones_path, method: :post do |f|
+      fieldset class="fieldset"
+        legend class="fieldset-legend" = t("app.zones.name")
+        = f.text_field "floor_zone[name]", class: "input w-full", id: nil
+      div class="modal-action"
+        button type="submit" class="btn btn-primary" = t("app.zones.create")
+        button type="button" class="btn btn-ghost" onclick="new_zone_modal.close()" = t("app.zones.cancel")

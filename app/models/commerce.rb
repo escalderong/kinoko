@@ -10,4 +10,5 @@ class Commerce
   has_many :product_categories
   has_many :tables
   has_many :users
+  has_many :floor_zones
 end

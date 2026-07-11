@@ -66,5 +66,24 @@ es:
         title: "Ajustes"
       users:
         title: "Usuarios"
+    tables:
+      new_table: "Nueva mesa"
+      edit_table: "Editar mesa"
+      number: "Número"
+      capacity: "Capacidad"
+      save: "Guardar"
+      cancel: "Cancelar"
+      create: "Crear"
+      delete_confirm: "¿Eliminar esta mesa?"
+      empty_tables: "Aún no hay mesas. Agregá una."
+    zones:
+      no_zones: "Aún no hay zonas. Creá la primera."
+      new_zone: "Nueva zona"
+      create: "Crear"
+      rename_zone: "Renombrar zona"
+      name: "Nombre"
+      save: "Guardar"
+      cancel: "Cancelar"
+      delete_confirm: "¿Eliminar esta zona y todas sus mesas?"
     errors:
       not_authorized: "No tienes permiso para realizar esta acción."

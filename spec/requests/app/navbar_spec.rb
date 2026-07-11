@@ -37,5 +37,29 @@ RSpec.describe "App navbar", type: :request do
         expect(response.body).not_to include(app_product_categories_path)
       end
     end
+
+    context 'when the user is an owner' do
+      it 'shows the settings navigation with a tables submenu' do
+        user = create(:user, role: :owner)
+        sign_in user
+
+        get "/app/orders"
+
+        expect(response.body).to include(I18n.t("app.nav.settings"))
+        expect(response.body).to include(app_settings_tables_path)
+        expect(response.body).to include(I18n.t("app.nav.tables"))
+      end
+    end
+
+    context 'when the user is a waiter' do
+      it 'does not show the settings navigation' do
+        user = create(:user, :waiter)
+        sign_in user
+
+        get "/app/orders"
+
+        expect(response.body).not_to include(I18n.t("app.nav.settings"))
+      end
+    end
   end
 end

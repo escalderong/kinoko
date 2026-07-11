@@ -1,0 +1,2 @@
+class TablePolicy < OwnerOnlyPolicy
+end

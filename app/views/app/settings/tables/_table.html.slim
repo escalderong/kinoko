@@ -1,0 +1,23 @@
+- cell = App::TablesHelper::GRID_CELL_PX
+div class="floor-plan-table absolute rounded-box border-2 border-base-content/20 hover:border-base-content/60 transition-colors bg-base-200 flex items-center justify-center select-none cursor-move" style="left:#{table.pos_x * cell}px; top:#{table.pos_y * cell}px; width:#{table.width * cell}px; height:#{table.height * cell}px" data-update-url=app_settings_table_path(table) data-table-number=table.number
+  div class="text-center pointer-events-none"
+    div class="font-bold leading-none" = table.number
+    div class="text-xs text-base-content/70" = "#{table.capacity}p"
+  div class="table-controls absolute -top-2 -right-2 gap-1 flex"
+    button type="button" class="btn btn-xs btn-circle btn-primary" onclick="edit_table_#{table.id}_modal.showModal()"
+      = icon("pencil", css_class: "h-3.5 w-3.5")
+    = button_to app_settings_table_path(table), method: :delete, class: "btn btn-xs btn-circle btn-error", form: { class: "contents", data: { turbo_confirm: t("app.tables.delete_confirm") } } do
+      = icon("trash", css_class: "h-3.5 w-3.5")
+  div class="resize-handle absolute bottom-0 right-0 w-4 h-4 cursor-nwse-resize text-base-content/60"
+    = icon("arrows_pointing_out", css_class: "h-4 w-4")
+  = render layout: "shared/modal", locals: { id: "edit_table_#{table.id}_modal", title: t("app.tables.edit_table") } do
+    = form_with url: app_settings_table_path(table), method: :patch do |f|
+      fieldset class="fieldset"
+        legend class="fieldset-legend" = t("app.tables.number")
+        = f.number_field "table[number]", value: table.number, class: "input w-full", id: nil
+      fieldset class="fieldset"
+        legend class="fieldset-legend" = t("app.tables.capacity")
+        = f.number_field "table[capacity]", value: table.capacity, class: "input w-full", id: nil
+      div class="modal-action"
+        button type="submit" class="btn btn-primary" = t("app.tables.save")
+        button type="button" class="btn btn-ghost" onclick="edit_table_#{table.id}_modal.close()" = t("app.tables.cancel")

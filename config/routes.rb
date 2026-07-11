@@ -17,7 +17,10 @@ Rails.application.routes.draw do
     # Distinct named path helpers (app_orders_path, app_tables_path, ...) all
     # map to PlaceholdersController#show via `defaults: { section: ... }`.
     get "orders",              to: "placeholders#show", as: :orders,              defaults: { section: "orders" }
-    get "tables",              to: "placeholders#show", as: :tables,              defaults: { section: "tables" }
+    namespace :settings do
+      resources :tables,      only: %i[index create update destroy]
+      resources :floor_zones, only: %i[create update destroy]
+    end
     get "products/categories", to: "placeholders#show", as: :product_categories, defaults: { section: "product_categories" }
     get "products/variants",   to: "placeholders#show", as: :product_variants,   defaults: { section: "product_variants" }
     get "products/modifiers",  to: "placeholders#show", as: :product_modifiers,  defaults: { section: "product_modifiers" }

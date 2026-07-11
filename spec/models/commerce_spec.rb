@@ -7,6 +7,7 @@ RSpec.describe Commerce, type: :model do
   it { is_expected.to have_many(:product_categories) }
   it { is_expected.to have_many(:tables) }
   it { is_expected.to have_many(:users) }
+  it { is_expected.to have_many(:floor_zones) }
 
   it { is_expected.to validate_presence_of(:name) }
 
