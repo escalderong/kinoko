@@ -20,6 +20,7 @@ Rails.application.routes.draw do
     namespace :settings do
       resources :tables,      only: %i[index create update destroy]
       resources :floor_zones, only: %i[create update destroy]
+      resource  :appearance,  only: %i[show update], controller: "appearance"
     end
     get "products/categories", to: "placeholders#show", as: :product_categories, defaults: { section: "product_categories" }
     get "products/variants",   to: "placeholders#show", as: :product_variants,   defaults: { section: "product_variants" }

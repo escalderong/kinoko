@@ -24,7 +24,8 @@ module App::NavbarHelper
         policy_action: :settings?,
         icon: SETTINGS_ICON,
         submenu: [
-          { key: "tables", path: app_settings_tables_path }
+          { key: "tables", path: app_settings_tables_path },
+          { key: "appearance", path: app_settings_appearance_path }
         ]
       )
     ].select { |item| commerce_policy.public_send(item.policy_action) }

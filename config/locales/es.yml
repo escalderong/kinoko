@@ -34,6 +34,7 @@ es:
     nav:
       orders: "Pedidos"
       tables: "Mesas"
+      appearance: "Apariencia"
       products: "Productos"
       product_categories: "Categorías"
       product_variants: "Variantes"
@@ -56,6 +57,8 @@ es:
         title: "Pedidos"
       tables:
         title: "Mesas"
+      appearance:
+        title: "Apariencia"
       product_categories:
         title: "Categorías"
       product_variants:
@@ -66,6 +69,10 @@ es:
         title: "Ajustes"
       users:
         title: "Usuarios"
+    appearance:
+      save: "Guardar tema"
+      saved: "Tema actualizado."
+      invalid: "Ese tema no está disponible."
     tables:
       new_table: "Nueva mesa"
       edit_table: "Editar mesa"

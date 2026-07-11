@@ -34,6 +34,7 @@ en:
     nav:
       orders: "Orders"
       tables: "Tables"
+      appearance: "Appearance"
       products: "Products"
       product_categories: "Categories"
       product_variants: "Variants"
@@ -56,6 +57,8 @@ en:
         title: "Orders"
       tables:
         title: "Tables"
+      appearance:
+        title: "Appearance"
       product_categories:
         title: "Categories"
       product_variants:
@@ -66,6 +69,10 @@ en:
         title: "Settings"
       users:
         title: "Users"
+    appearance:
+      save: "Save theme"
+      saved: "Theme updated."
+      invalid: "That theme is not available."
     tables:
       new_table: "New table"
       edit_table: "Edit table"

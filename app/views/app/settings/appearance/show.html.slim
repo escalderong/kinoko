@@ -1,0 +1,16 @@
+h1 class="text-xl font-bold mb-4" = t("app.sections.appearance.title")
+
+= form_with url: app_settings_appearance_path, method: :patch, class: "flex flex-col gap-4"
+  div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3"
+    - Commerce::THEMES.each do |theme_name|
+      label class="cursor-pointer"
+        input type="radio" name="commerce[theme]" value=theme_name checked=(@commerce.theme == theme_name) class="theme-controller sr-only peer"
+        div data-theme=theme_name class="rounded-box border-2 border-base-300 peer-checked:border-primary bg-base-100 text-base-content overflow-hidden p-2 flex flex-col gap-2"
+          span class="font-bold text-sm capitalize" = theme_name
+          div class="flex gap-1"
+            div class="bg-primary w-5 h-5 rounded"
+            div class="bg-secondary w-5 h-5 rounded"
+            div class="bg-accent w-5 h-5 rounded"
+            div class="bg-neutral w-5 h-5 rounded"
+
+  div = button_tag t("app.appearance.save"), type: "submit", class: "btn btn-primary self-start"

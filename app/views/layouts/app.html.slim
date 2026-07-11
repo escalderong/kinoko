@@ -1,9 +1,10 @@
 doctype html
-html data-theme="#{current_user&.commerce&.theme || 'light'}"
+- theme = current_user&.commerce&.theme || Commerce::DEFAULT_THEME
+html data-theme=theme
   head
     = render "layouts/head"
 
-  body class="min-h-screen bg-base-100 text-base-content"
+  body data-controller="theme" data-theme-name-value=theme class="min-h-screen bg-base-100 text-base-content"
     = render "app/shared/navbar"
 
     div class="container mx-auto px-4 pt-4 flex flex-col gap-2"
