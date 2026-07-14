@@ -5,11 +5,11 @@ div class="floor-plan-table absolute rounded-box border-2 border-base-content/20
     div class="text-xs text-base-content/70" = "#{table.capacity}p"
   div class="table-controls absolute -top-2 -right-2 gap-1 flex"
     button type="button" class="btn btn-xs btn-circle btn-primary" onclick="edit_table_#{table.id}_modal.showModal()"
-      = icon("pencil", css_class: "h-3.5 w-3.5")
+      = icon("pen", class: "text-xs")
     = button_to app_settings_table_path(table), method: :delete, class: "btn btn-xs btn-circle btn-error", form: { class: "contents", data: { turbo_confirm: t("app.tables.delete_confirm") } } do
-      = icon("trash", css_class: "h-3.5 w-3.5")
+      = icon("trash", class: "text-xs")
   div class="resize-handle absolute bottom-0 right-0 w-4 h-4 cursor-nwse-resize text-base-content/60"
-    = icon("arrows_pointing_out", css_class: "h-4 w-4")
+    = icon("expand", class: "text-sm")
   = render layout: "shared/modal", locals: { id: "edit_table_#{table.id}_modal", title: t("app.tables.edit_table") } do
     = form_with url: app_settings_table_path(table), method: :patch do |f|
       fieldset class="fieldset"

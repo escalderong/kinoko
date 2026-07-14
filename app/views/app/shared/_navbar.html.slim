@@ -2,24 +2,19 @@ div class="navbar bg-base-200 shadow-sm"
   div class="navbar-start"
     div class="dropdown"
       div tabindex="0" role="button" class="btn btn-ghost lg:hidden"
-        svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-          path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16"/
+        = icon("bars", class: "text-lg")
       ul tabindex="-1" class="menu menu-sm dropdown-content bg-base-200 rounded-box z-1 mt-3 w-52 p-2 shadow"
         - nav_items = app_nav_items
         - nav_items.each do |item|
           - if item.submenu
             li
-              a
-                = render "app/shared/nav_icon", path: item.icon
-                = t("app.nav.#{item.key}")
+              a = nav_item_label(item)
               ul class="p-2"
                 - item.submenu.each do |sub|
                   li = link_to t("app.nav.#{sub[:key]}"), sub[:path]
           - else
             li
-              = link_to item.path do
-                = render "app/shared/nav_icon", path: item.icon
-                = t("app.nav.#{item.key}")
+              = link_to nav_item_label(item), item.path
     span class="btn btn-ghost text-xl" Kinoko
 
     ul class="menu menu-horizontal px-1 hidden lg:flex"
@@ -27,17 +22,13 @@ div class="navbar bg-base-200 shadow-sm"
         - if item.submenu
           li
             details
-              summary
-                = render "app/shared/nav_icon", path: item.icon
-                = t("app.nav.#{item.key}")
+              summary = nav_item_label(item)
               ul class="p-2 bg-base-200 w-40 z-1"
                 - item.submenu.each do |sub|
                   li = link_to t("app.nav.#{sub[:key]}"), sub[:path]
         - else
           li
-            = link_to item.path do
-              = render "app/shared/nav_icon", path: item.icon
-              = t("app.nav.#{item.key}")
+            = link_to nav_item_label(item), item.path
 
   div class="navbar-end"
     div class="avatar avatar-placeholder"

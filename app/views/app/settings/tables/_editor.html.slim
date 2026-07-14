@@ -6,7 +6,7 @@ div data-controller="zones"
         p class="text-base-content/70" = t("app.zones.no_zones")
         div class="card-actions"
           button type="button" class="btn btn-primary btn-sm" onclick="new_zone_modal.showModal()"
-            = icon("plus", css_class: "h-4 w-4")
+            = icon("plus", class: "text-sm")
             = t("app.zones.new_zone")
   - else
     div class="flex flex-wrap items-center justify-between gap-2 mb-3"
@@ -17,10 +17,10 @@ div data-controller="zones"
               button type="button" class=(zone == @active_zone ? "menu-active" : nil) data-zones-target="tab" data-zone-id=zone.id.to_s data-action="click->zones#switch"
                 = zone.name
         button type="button" class="btn btn-ghost btn-sm" onclick="new_zone_modal.showModal()"
-          = icon("plus", css_class: "h-4 w-4")
+          = icon("plus", class: "text-sm")
 
       button type="button" class="btn btn-primary btn-sm" onclick="new_table_modal.showModal()"
-        = icon("plus", css_class: "h-4 w-4")
+        = icon("plus", class: "text-sm")
         = t("app.tables.new_table")
 
     - @zones.each do |zone|
@@ -28,9 +28,9 @@ div data-controller="zones"
       div data-zones-target="panel" data-zone-id=zone.id.to_s class="floor-plan-panel #{'hidden' unless zone == @active_zone}"
         div class="flex items-center justify-end gap-2 mb-2"
           button type="button" class="btn btn-ghost btn-sm" onclick="rename_zone_#{zone.id}_modal.showModal()"
-            = icon("pencil", css_class: "h-4 w-4")
+            = icon("pen", class: "text-sm")
           = button_to app_settings_floor_zone_path(zone), method: :delete, class: "btn btn-ghost btn-sm text-error", form: { class: "contents", data: { turbo_confirm: t("app.zones.delete_confirm") } } do
-            = icon("trash", css_class: "h-4 w-4")
+            = icon("trash", class: "text-sm")
         div class="overflow-auto rounded-box border border-base-300 bg-base-100"
           div data-controller="floor-plan" data-floor-plan-cell-value=cell class="floor-plan-canvas relative" style="min-height:60vh; width:100%; background-image: radial-gradient(circle, var(--color-base-300) 1px, transparent 1px); background-size: #{cell}px #{cell}px; background-position: -#{cell / 2}px -#{cell / 2}px;"
             - zone_tables.each do |table|
