@@ -31,14 +31,8 @@ export default class extends Controller {
     let gx = gx0, gy = gy0
 
     // Canvas bounds and every other table's rect, all in grid cells (fixed for the drag).
-    const cols = Math.floor(this.element.clientWidth / cell)
-    const rows = Math.floor(this.element.clientHeight / cell)
-    const others = Array.from(this.element.querySelectorAll(".floor-plan-table"))
-      .filter((t) => t !== el)
-      .map((t) => ({
-        x: this.gridUnits(t.style.left), y: this.gridUnits(t.style.top),
-        w: this.gridUnits(t.style.width), h: this.gridUnits(t.style.height)
-      }))
+    const { cols, rows } = this.gridSize()
+    const others = this.otherRects(el)
 
     const fits = (x, y) => {
       if (x < 0 || y < 0 || x + w > cols || y + h > rows) return false
@@ -61,19 +55,35 @@ export default class extends Controller {
   }
 
   startResize(event, el) {
+    const cell = this.cell
     const startX = event.clientX, startY = event.clientY
-    const w0 = parseInt(el.style.width, 10), h0 = parseInt(el.style.height, 10)
-    const move = (e) => {
-      el.style.width = Math.max(this.cell, w0 + e.clientX - startX) + "px"
-      el.style.height = Math.max(this.cell, h0 + e.clientY - startY) + "px"
+    const gx = this.gridUnits(el.style.left)
+    const gy = this.gridUnits(el.style.top)
+    const w0 = this.gridUnits(el.style.width)
+    const h0 = this.gridUnits(el.style.height)
+    let w = w0, h = h0
+
+    const { cols, rows } = this.gridSize()
+    const others = this.otherRects(el)
+
+    const fits = (nw, nh) => {
+      if (nw < 1 || nh < 1 || gx + nw > cols || gy + nh > rows) return false
+      return !others.some((o) => gx < o.x + o.w && gx + nw > o.x && gy < o.y + o.h && gy + nh > o.y)
     }
-    this.trackPointer(move, () => {
-      const w = Math.max(1, Math.round(parseInt(el.style.width, 10) / this.cell))
-      const h = Math.max(1, Math.round(parseInt(el.style.height, 10) / this.cell))
-      el.style.width = w * this.cell + "px"
-      el.style.height = h * this.cell + "px"
-      this.persist(el, { width: w, height: h })
-    })
+
+    const move = (e) => {
+      // Target size straight from the cursor, then grow/shrink one cell at a
+      // time so it stops at the canvas edge or against another table.
+      const targetW = w0 + Math.round((e.clientX - startX) / cell)
+      const targetH = h0 + Math.round((e.clientY - startY) / cell)
+      const stepW = Math.sign(targetW - w)
+      while (w !== targetW && fits(w + stepW, h)) w += stepW
+      const stepH = Math.sign(targetH - h)
+      while (h !== targetH && fits(w, h + stepH)) h += stepH
+      el.style.width = w * cell + "px"
+      el.style.height = h * cell + "px"
+    }
+    this.trackPointer(move, () => this.persist(el, { width: w, height: h }))
   }
 
   // Run `move` on every pointermove, then `onFinish` once on pointerup, cleaning
@@ -90,6 +100,24 @@ export default class extends Controller {
 
   gridUnits(px) {
     return Math.round((parseInt(px, 10) || 0) / this.cell)
+  }
+
+  // Canvas dimensions in grid cells.
+  gridSize() {
+    return {
+      cols: Math.floor(this.element.clientWidth / this.cell),
+      rows: Math.floor(this.element.clientHeight / this.cell)
+    }
+  }
+
+  // Every other table's rect in grid cells (fixed for the gesture).
+  otherRects(el) {
+    return Array.from(this.element.querySelectorAll(".floor-plan-table"))
+      .filter((t) => t !== el)
+      .map((t) => ({
+        x: this.gridUnits(t.style.left), y: this.gridUnits(t.style.top),
+        w: this.gridUnits(t.style.width), h: this.gridUnits(t.style.height)
+      }))
   }
 
   persist(el, attrs) {
