@@ -28,8 +28,8 @@ Rails.application.routes.draw do
     get "settings",            to: "placeholders#show", as: :settings,            defaults: { section: "settings" }
     get "users",               to: "placeholders#show", as: :users,              defaults: { section: "users" }
 
-    # Preferences modal (locale switcher) — singular resource scoped to current_user.
-    resource :preferences, only: %i[edit update], controller: "preferences"
+    # Locale switcher — singular resource scoped to current_user.
+    resource :preferences, only: %i[update], controller: "preferences"
   end
 
   # Defines the root path route ("/")

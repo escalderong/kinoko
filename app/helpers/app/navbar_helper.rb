@@ -28,6 +28,10 @@ module App::NavbarHelper
   end
 
   def nav_item_label(item)
-    safe_join([ icon(item.icon, class: "text-sm"), t("app.nav.#{item.key}") ])
+    icon_label(item.icon, t("app.nav.#{item.key}"))
+  end
+
+  def icon_label(name, text)
+    safe_join([ icon(name, class: "text-sm"), text ])
   end
 end

@@ -1,4 +1,4 @@
-div class="navbar bg-base-200 shadow-sm"
+div class="navbar bg-base-200 shadow-sm" data-controller="navbar-menu"
   div class="navbar-start"
     div class="dropdown"
       div tabindex="0" role="button" class="btn btn-ghost lg:hidden"
@@ -30,7 +30,18 @@ div class="navbar bg-base-200 shadow-sm"
           li
             = link_to nav_item_label(item), item.path
 
-  div class="navbar-end"
-    div class="avatar avatar-placeholder"
-      div class="bg-neutral text-neutral-content w-10 rounded-full"
-        span = current_user.name.first.upcase
+  div class="navbar-end pr-4"
+    div class="dropdown dropdown-end"
+      div tabindex="0" role="button" class="avatar avatar-placeholder"
+        div class="bg-neutral text-neutral-content w-10 rounded-full"
+          span = current_user.name.first.upcase
+      ul tabindex="-1" class="menu dropdown-content bg-base-200 rounded-box z-1 mt-3 w-52 p-2 shadow"
+        li
+          details
+            summary = icon_label("globe", t("app.preferences.language"))
+            ul class="p-2 bg-base-200 w-40 z-1"
+              - I18n.available_locales.each do |loc|
+                li
+                  = link_to t("app.preferences.locales.#{loc}"), app_preferences_path(locale: loc), data: { turbo_method: :patch }, class: ("menu-active" if loc.to_s == current_user.locale)
+        li
+          = link_to icon_label("right-from-bracket", t("app.nav.logout")), destroy_user_session_path, data: { turbo_method: :delete }
