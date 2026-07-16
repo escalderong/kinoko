@@ -1,4 +1,5 @@
-- app_flash_messages.each do |message, style|
-  div role="alert" data-controller="flash" class="alert #{style[:class]} alert-vertical sm:alert-horizontal transition-opacity duration-300"
-    = icon(style[:icon], class: "text-xl shrink-0")
-    span = message
+div class="toast toast-bottom toast-center"
+  - app_flash_messages.each do |message, style|
+    div role="alert" data-controller="flash" class="alert #{style[:class]} alert-vertical sm:alert-horizontal transition-opacity duration-300"
+      = icon(style[:icon], class: "text-xl shrink-0")
+      span = message
