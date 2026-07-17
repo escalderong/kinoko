@@ -1,0 +1,5 @@
+ul class="menu menu-horizontal menu-lg bg-base-200 rounded-box"
+  - zones.each do |zone|
+    li
+      button type="button" class=(zone == active_zone ? "menu-active" : nil) data-zones-target="tab" data-zone-id=zone.id.to_s data-action="click->zones#switch"
+        = zone.name

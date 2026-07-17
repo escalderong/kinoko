@@ -1,0 +1,10 @@
+- state_classes = open ? "bg-warning/20 border-warning/40 cursor-default" : "bg-base-200 border-base-content/20 hover:border-primary cursor-pointer transition-colors"
+div class="absolute rounded-box border-2 flex items-center justify-center select-none #{state_classes}" style=table_rect_style(table) data-table-number=table.number title=(open ? t("app.tables.open_order") : nil) data-test=(open ? "table-open" : nil) onclick=(open ? nil : "new_order_#{table.id}_modal.showModal()")
+  div class="text-center pointer-events-none"
+    div class="font-bold leading-none" = table.number
+    div class="text-xs text-base-content/70" = "#{table.capacity}p"
+  - unless open
+    = render layout: "shared/modal", locals: { id: "new_order_#{table.id}_modal", title: t("app.tables.new_order_for_table", number: table.number) } do
+      p = t("app.tables.new_order_placeholder")
+      div class="modal-action"
+        button type="button" class="btn btn-ghost" onclick="new_order_#{table.id}_modal.close()" = t("app.tables.cancel")

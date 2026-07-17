@@ -8,6 +8,8 @@ class Order
 
   as_enum :status, { open: 1, closed: 2 }, field: { default: 1 }
 
+  scope :open, -> { where(status_cd: statuses[:open]) }
+
   validates_presence_of :opened_at
 
   belongs_to :table, optional: false

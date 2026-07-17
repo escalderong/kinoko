@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     # Distinct named path helpers (app_orders_path, app_tables_path, ...) all
     # map to PlaceholdersController#show via `defaults: { section: ... }`.
     get "orders",              to: "placeholders#show", as: :orders,              defaults: { section: "orders" }
+    resources :tables, only: :index
     namespace :settings do
       resources :tables,      only: %i[index create update destroy]
       resources :floor_zones, only: %i[create update destroy]

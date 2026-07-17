@@ -4,6 +4,7 @@ module App::NavbarHelper
   def app_nav_items
     commerce_policy = policy(current_user.commerce)
     [
+      NavItem.new(key: "tables", path: app_tables_path, policy_action: :view_tables?, icon: "chair"),
       NavItem.new(key: "orders", path: app_orders_path, policy_action: :view_orders?, icon: "receipt"),
       NavItem.new(
         key: "products",

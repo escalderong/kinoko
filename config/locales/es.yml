@@ -83,6 +83,10 @@ es:
       create: "Crear"
       delete_confirm: "¿Eliminar esta mesa?"
       empty_tables: "Aún no hay mesas. Agregá una."
+      no_tables_yet: "Aún no se han configurado mesas."
+      open_order: "Pedido en curso"
+      new_order_for_table: "Nuevo pedido — Mesa %{number}"
+      new_order_placeholder: "La selección de productos aún no está disponible. Vuelve pronto."
     zones:
       no_zones: "Aún no hay zonas. Creá la primera."
       new_zone: "Nueva zona"

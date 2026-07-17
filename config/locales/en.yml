@@ -83,6 +83,10 @@ en:
       create: "Create"
       delete_confirm: "Delete this table?"
       empty_tables: "No tables yet — add one."
+      no_tables_yet: "No tables have been set up yet."
+      open_order: "Order in progress"
+      new_order_for_table: "New order — Table %{number}"
+      new_order_placeholder: "Product selection isn't available yet. Check back soon."
     zones:
       no_zones: "No zones yet. Create your first one."
       new_zone: "New zone"

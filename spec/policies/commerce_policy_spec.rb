@@ -31,6 +31,10 @@ RSpec.describe CommercePolicy do
     it 'permits view_products?' do
       expect(policy.view_products?).to be true
     end
+
+    it 'permits view_tables?' do
+      expect(policy.view_tables?).to be true
+    end
   end
 
   context 'when the user is an admin' do
@@ -42,6 +46,10 @@ RSpec.describe CommercePolicy do
 
     it 'permits view_products?' do
       expect(policy.view_products?).to be true
+    end
+
+    it 'permits view_tables?' do
+      expect(policy.view_tables?).to be true
     end
   end
 
@@ -70,6 +78,10 @@ RSpec.describe CommercePolicy do
 
     it 'denies view_products?' do
       expect(policy.view_products?).to be false
+    end
+
+    it 'permits view_tables?' do
+      expect(policy.view_tables?).to be true
     end
   end
 

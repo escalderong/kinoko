@@ -26,4 +26,13 @@ RSpec.describe Order, type: :model do
       expect(order.open?).to be false
     end
   end
+
+  describe '.open' do
+    it 'returns only orders with open status' do
+      open_order = create(:order, status: :open)
+      create(:order, status: :closed)
+
+      expect(described_class.open.to_a).to eq([ open_order ])
+    end
+  end
 end

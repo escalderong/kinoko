@@ -12,6 +12,15 @@ RSpec.describe "App navbar", type: :request do
         expect(response.body).to include(app_orders_path)
         expect(response.body).to include(app_product_categories_path)
       end
+
+      it 'shows the tables navigation' do
+        user = create(:user, role: :owner)
+        sign_in user
+
+        get "/app/orders"
+
+        expect(response.body).to include(app_tables_path)
+      end
     end
 
     context 'when the user is an admin' do
@@ -24,6 +33,15 @@ RSpec.describe "App navbar", type: :request do
         expect(response.body).to include(app_orders_path)
         expect(response.body).to include(app_product_categories_path)
       end
+
+      it 'shows the tables navigation' do
+        user = create(:user, :admin)
+        sign_in user
+
+        get "/app/orders"
+
+        expect(response.body).to include(app_tables_path)
+      end
     end
 
     context 'when the user is a waiter' do
@@ -35,6 +53,15 @@ RSpec.describe "App navbar", type: :request do
 
         expect(response.body).to include(app_orders_path)
         expect(response.body).not_to include(app_product_categories_path)
+      end
+
+      it 'shows the tables navigation' do
+        user = create(:user, :waiter)
+        sign_in user
+
+        get "/app/orders"
+
+        expect(response.body).to include(app_tables_path)
       end
     end
 

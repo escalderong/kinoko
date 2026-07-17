@@ -8,6 +8,7 @@ class CommercePolicy < ApplicationPolicy
 
   def view_orders?   = user.present?
   def view_products? = user.present? && (user.owner? || user.admin?)
+  def view_tables?   = user.present?
 
   private
 

@@ -1,0 +1,20 @@
+- cell = App::TablesHelper::GRID_CELL_PX
+div data-controller="zones"
+  - if @zones.empty?
+    div class="card bg-base-100 border border-base-300 shadow-sm max-w-md mx-auto mt-10" data-test="no-zones"
+      div class="card-body items-center text-center"
+        p class="text-base-content/70" = t("app.tables.no_tables_yet")
+  - else
+    div class="flex flex-wrap items-center justify-between gap-2 mb-3"
+      div class="flex items-center gap-2"
+        = render "app/shared/zone_tabs", zones: @zones, active_zone: @active_zone
+
+    - @zones.each do |zone|
+      - zone_tables = @tables_by_zone[zone.id] || []
+      div data-zones-target="panel" data-zone-id=zone.id.to_s class="floor-plan-panel #{'hidden' unless zone == @active_zone}"
+        div class="overflow-auto rounded-box border border-base-300 bg-base-100"
+          div class="floor-plan-canvas relative" style="min-height:60vh; width:100%; background-image: radial-gradient(circle, var(--color-base-300) 1px, transparent 1px); background-size: #{cell}px #{cell}px; background-position: -#{cell / 2}px -#{cell / 2}px;"
+            - zone_tables.each do |table|
+              = render "app/tables/table", table: table, open: @open_table_ids.include?(table.id)
+            - if zone_tables.empty?
+              p class="p-4 text-base-content/60" = t("app.tables.empty_tables")
