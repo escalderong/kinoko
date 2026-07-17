@@ -19,4 +19,3 @@ div class="floor-plan-table absolute rounded-box border-2 border-base-content/20
         = f.number_field "table[capacity]", value: table.capacity, class: "input w-full", id: nil
       div class="modal-action"
         button type="submit" class="btn btn-primary" = t("app.tables.save")
-        button type="button" class="btn btn-ghost" onclick="edit_table_#{table.id}_modal.close()" = t("app.tables.cancel")

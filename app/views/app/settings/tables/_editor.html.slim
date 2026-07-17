@@ -41,7 +41,6 @@ div data-controller="zones"
               = f.text_field "floor_zone[name]", value: zone.name, class: "input w-full", id: nil
             div class="modal-action"
               button type="submit" class="btn btn-primary" = t("app.zones.save")
-              button type="button" class="btn btn-ghost" onclick="rename_zone_#{zone.id}_modal.close()" = t("app.zones.cancel")
 
     = render layout: "shared/modal", locals: { id: "new_table_modal", title: t("app.tables.new_table") } do
       = form_with url: app_settings_tables_path, method: :post do |f|
@@ -55,7 +54,6 @@ div data-controller="zones"
             = f.number_field "table[capacity]", class: "input w-full", id: nil
         div class="modal-action"
           button type="submit" class="btn btn-primary" = t("app.tables.create")
-          button type="button" class="btn btn-ghost" onclick="new_table_modal.close()" = t("app.tables.cancel")
 
   = render layout: "shared/modal", locals: { id: "new_zone_modal", title: t("app.zones.new_zone") } do
     = form_with url: app_settings_floor_zones_path, method: :post do |f|
@@ -64,4 +62,3 @@ div data-controller="zones"
         = f.text_field "floor_zone[name]", class: "input w-full", id: nil
       div class="modal-action"
         button type="submit" class="btn btn-primary" = t("app.zones.create")
-        button type="button" class="btn btn-ghost" onclick="new_zone_modal.close()" = t("app.zones.cancel")
