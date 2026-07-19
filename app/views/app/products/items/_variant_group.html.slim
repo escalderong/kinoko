@@ -10,9 +10,10 @@ div class="card bg-base-100 border border-base-300" data-variant-group-id=group.
           = icon("pen", class: "text-xs")
         = button_to app_products_item_variant_group_path(product, group), method: :delete, class: "btn btn-ghost btn-xs btn-square text-error", form: { class: "contents", data: { turbo_confirm: t("app.products.variant_groups.delete_confirm") } } do
           = icon("trash", class: "text-xs")
-    - if group.variants.any?
+    - variants = group.variants.to_a
+    - if variants.any?
       ul class="list"
-        = render partial: "app/products/items/variant", collection: group.variants, as: :variant, locals: { product: product, group: group }
+        = render partial: "app/products/items/variant", collection: variants, as: :variant, locals: { product: product, group: group }
     button type="button" class="btn btn-ghost btn-sm justify-start" onclick="new_variant_#{group.id}_modal.showModal()"
       = icon("plus", class: "text-xs")
       = t("app.products.variants.new")

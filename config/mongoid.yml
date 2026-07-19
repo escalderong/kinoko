@@ -4,7 +4,6 @@ development:
       uri: <%= ENV["MONGO_ATLAS_DEV_URI"] %>
       options:
         server_selection_timeout: 5
-        log_level: :warn
 
 test:
   clients:
