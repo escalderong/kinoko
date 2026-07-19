@@ -1,0 +1,36 @@
+div class="card bg-base-100 border border-base-300" data-variant-group-id=group.id
+  div class="card-body gap-3"
+    div class="flex items-center justify-between"
+      div class="flex items-center gap-2"
+        span class="font-medium" = group.name
+        - if group.is_required
+          span class="badge badge-sm badge-neutral" = t("app.products.variant_groups.required")
+      div class="flex items-center gap-1"
+        button type="button" class="btn btn-ghost btn-xs btn-square" onclick="edit_variant_group_#{group.id}_modal.showModal()"
+          = icon("pen", class: "text-xs")
+        = button_to app_products_item_variant_group_path(product, group), method: :delete, class: "btn btn-ghost btn-xs btn-square text-error", form: { class: "contents", data: { turbo_confirm: t("app.products.variant_groups.delete_confirm") } } do
+          = icon("trash", class: "text-xs")
+    - if group.variants.any?
+      ul class="list"
+        - group.variants.each do |variant|
+          li class="list-row items-center" data-variant-id=variant.id
+            div class="list-col-grow" = variant.name
+            div class="text-sm text-base-content/60" = variant.sku
+            div class="text-sm text-base-content/60" = variant.price_delta.format
+            = button_to app_products_item_variant_group_variant_path(product, group, variant), method: :delete, class: "btn btn-ghost btn-xs btn-square text-error", form: { class: "contents", data: { turbo_confirm: t("app.products.variants.delete_confirm") } } do
+              = icon("trash", class: "text-xs")
+    button type="button" class="btn btn-ghost btn-sm justify-start" onclick="new_variant_#{group.id}_modal.showModal()"
+      = icon("plus", class: "text-xs")
+      = t("app.products.variants.new")
+
+  = render layout: "shared/modal", locals: { id: "edit_variant_group_#{group.id}_modal", title: t("app.products.variant_groups.edit") } do
+    = form_with url: app_products_item_variant_group_path(product, group), method: :patch do
+      = render "app/products/items/variant_group_fields", group: group
+      div class="modal-action"
+        button type="submit" class="btn btn-primary" = t("app.products.variant_groups.save")
+
+  = render layout: "shared/modal", locals: { id: "new_variant_#{group.id}_modal", title: t("app.products.variants.new") } do
+    = form_with url: app_products_item_variant_group_variants_path(product, group), method: :post do
+      = render "app/products/items/variant_fields", variant: Variant.new
+      div class="modal-action"
+        button type="submit" class="btn btn-primary" = t("app.products.variants.create")

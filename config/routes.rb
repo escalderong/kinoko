@@ -23,9 +23,17 @@ Rails.application.routes.draw do
       resources :floor_zones, only: %i[create update destroy]
       resource  :appearance,  only: %i[show update], controller: "appearance"
     end
-    get "products/categories", to: "placeholders#show", as: :product_categories, defaults: { section: "product_categories" }
-    get "products/variants",   to: "placeholders#show", as: :product_variants,   defaults: { section: "product_variants" }
-    get "products/modifiers",  to: "placeholders#show", as: :product_modifiers,  defaults: { section: "product_modifiers" }
+    namespace :products do
+      resources :categories, only: %i[index create update destroy]
+      resources :items, only: %i[index edit create update destroy] do
+        resources :variant_groups, only: %i[create update destroy] do
+          resources :variants, only: %i[create update destroy]
+        end
+        resources :modifier_groups, only: %i[create update destroy] do
+          resources :modifiers, only: %i[create update destroy]
+        end
+      end
+    end
     get "settings",            to: "placeholders#show", as: :settings,            defaults: { section: "settings" }
     get "users",               to: "placeholders#show", as: :users,              defaults: { section: "users" }
 

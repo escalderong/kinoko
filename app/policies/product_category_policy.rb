@@ -1,0 +1,2 @@
+class ProductCategoryPolicy < OwnerAdminPolicy
+end

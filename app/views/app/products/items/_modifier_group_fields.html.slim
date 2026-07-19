@@ -1,0 +1,16 @@
+/ Shared modifier group form fields. Local: group.
+fieldset class="fieldset"
+  legend class="fieldset-legend" = t("app.products.modifier_groups.name")
+  = text_field_tag "modifier_group[name]", group.name, class: "input w-full"
+div class="grid grid-cols-2 gap-3"
+  fieldset class="fieldset"
+    legend class="fieldset-legend" = t("app.products.modifier_groups.min_selected")
+    = number_field_tag "modifier_group[min_selected]", group.min_selected, min: "0", class: "input w-full"
+  fieldset class="fieldset"
+    legend class="fieldset-legend" = t("app.products.modifier_groups.max_selected")
+    = number_field_tag "modifier_group[max_selected]", group.max_selected, min: "0", class: "input w-full"
+fieldset class="fieldset"
+  label class="label cursor-pointer justify-start gap-3"
+    = hidden_field_tag "modifier_group[is_required]", "0"
+    = check_box_tag "modifier_group[is_required]", "1", group.is_required, class: "toggle toggle-primary"
+    span = t("app.products.modifier_groups.required")

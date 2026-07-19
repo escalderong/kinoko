@@ -1,0 +1,15 @@
+/ Shared product form fields. Locals: product, categories.
+fieldset class="fieldset"
+  legend class="fieldset-legend" = t("app.products.items.name")
+  = text_field_tag "product[name]", product.name, class: "input w-full"
+fieldset class="fieldset"
+  legend class="fieldset-legend" = t("app.products.items.category")
+  = select_tag "product[product_category_id]", options_from_collection_for_select(categories, :id, :name, product.product_category_id), class: "select w-full"
+fieldset class="fieldset"
+  legend class="fieldset-legend" = t("app.products.items.price")
+  = number_field_tag "product[base_price]", product.base_price&.amount, min: "0", step: "0.01", class: "input w-full"
+fieldset class="fieldset"
+  label class="label cursor-pointer justify-start gap-3"
+    = hidden_field_tag "product[is_active]", "0"
+    = check_box_tag "product[is_active]", "1", product.is_active, class: "toggle toggle-primary"
+    span = t("app.products.items.active")

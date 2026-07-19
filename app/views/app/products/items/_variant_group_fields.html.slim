@@ -1,0 +1,9 @@
+/ Shared variant group form fields. Local: group.
+fieldset class="fieldset"
+  legend class="fieldset-legend" = t("app.products.variant_groups.name")
+  = text_field_tag "variant_group[name]", group.name, class: "input w-full"
+fieldset class="fieldset"
+  label class="label cursor-pointer justify-start gap-3"
+    = hidden_field_tag "variant_group[is_required]", "0"
+    = check_box_tag "variant_group[is_required]", "1", group.is_required, class: "toggle toggle-primary"
+    span = t("app.products.variant_groups.required")

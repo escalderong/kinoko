@@ -1,0 +1,17 @@
+/ Compact icon picker: a small square trigger next to the name field. The menu
+/ uses the native Popover API so it renders in the top layer (escaping the
+/ modal's overflow) and is positioned under the trigger by the Stimulus
+/ controller — robust across browsers that lack CSS anchor positioning.
+/ Local: category.
+- selected = category.icon.presence || ProductCategory::ICONS.first
+- popover_id = "icon_picker_#{category.persisted? ? category.id : 'new'}"
+div data-controller="icon-picker"
+  button type="button" class="btn btn-square bg-base-100 border-base-content/20" popovertarget=popover_id data-icon-picker-target="trigger" aria-label=t("app.products.categories.choose_icon")
+    i data-icon-picker-target="preview" data-base-class="fa-solid text-lg" class="fa-solid fa-#{selected} text-lg" aria-hidden="true"
+  ul id=popover_id popover="auto" data-icon-picker-target="menu" data-action="beforetoggle->icon-picker#reposition" class="bg-base-200 rounded-box shadow p-2 w-52 lg:w-96 m-0"
+    li
+      div class="grid grid-cols-3 lg:grid-cols-6 gap-1 max-h-72 overflow-y-auto"
+        - ProductCategory::ICONS.each do |name|
+          label class="btn btn-ghost w-full aspect-square text-lg has-[:checked]:btn-primary"
+            input type="radio" name="product_category[icon]" value=name checked=(name == selected) class="sr-only" data-action="icon-picker#select"
+            = icon(name)

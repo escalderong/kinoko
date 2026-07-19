@@ -21,6 +21,7 @@ class Commerce
   validates :theme, inclusion: { in: THEMES }
 
   has_many :product_categories
+  has_many :products
   has_many :tables
   has_many :users
   has_many :floor_zones

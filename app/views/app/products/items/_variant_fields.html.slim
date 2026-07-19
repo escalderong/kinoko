@@ -1,0 +1,10 @@
+/ Shared variant form fields. Local: variant.
+fieldset class="fieldset"
+  legend class="fieldset-legend" = t("app.products.variants.name")
+  = text_field_tag "variant[name]", variant.name, class: "input w-full"
+fieldset class="fieldset"
+  legend class="fieldset-legend" = t("app.products.variants.sku")
+  = text_field_tag "variant[sku]", variant.sku, class: "input w-full"
+fieldset class="fieldset"
+  legend class="fieldset-legend" = t("app.products.variants.price_delta")
+  = number_field_tag "variant[price_delta]", variant.price_delta&.amount, min: "0", step: "0.01", class: "input w-full"

@@ -1,0 +1,44 @@
+div class="max-w-3xl mx-auto"
+  div class="flex items-center gap-2 mb-1"
+    = link_to app_products_items_path, class: "btn btn-ghost btn-sm btn-square", aria: { label: t("app.products.items.title") }
+      = icon("arrow-left", class: "text-sm")
+    h1 class="text-xl font-bold" = @product.name
+  p class="text-base-content/60 mb-6" = @product.base_price.format
+
+  section class="mb-8"
+    div class="flex items-center justify-between mb-3"
+      h2 class="font-semibold" = t("app.products.variant_groups.title")
+      button type="button" class="btn btn-sm btn-primary" onclick="new_variant_group_modal.showModal()"
+        = icon("plus", class: "text-sm")
+        = t("app.products.variant_groups.new")
+    - if @variant_groups.empty?
+      p class="text-base-content/60 text-sm" = t("app.products.variant_groups.empty")
+    - else
+      div class="flex flex-col gap-4"
+        - @variant_groups.each do |group|
+          = render "app/products/items/variant_group", product: @product, group: group
+
+  section
+    div class="flex items-center justify-between mb-3"
+      h2 class="font-semibold" = t("app.products.modifier_groups.title")
+      button type="button" class="btn btn-sm btn-primary" onclick="new_modifier_group_modal.showModal()"
+        = icon("plus", class: "text-sm")
+        = t("app.products.modifier_groups.new")
+    - if @modifier_groups.empty?
+      p class="text-base-content/60 text-sm" = t("app.products.modifier_groups.empty")
+    - else
+      div class="flex flex-col gap-4"
+        - @modifier_groups.each do |group|
+          = render "app/products/items/modifier_group", product: @product, group: group
+
+  = render layout: "shared/modal", locals: { id: "new_variant_group_modal", title: t("app.products.variant_groups.new") } do
+    = form_with url: app_products_item_variant_groups_path(@product), method: :post do
+      = render "app/products/items/variant_group_fields", group: VariantGroup.new
+      div class="modal-action"
+        button type="submit" class="btn btn-primary" = t("app.products.variant_groups.create")
+
+  = render layout: "shared/modal", locals: { id: "new_modifier_group_modal", title: t("app.products.modifier_groups.new") } do
+    = form_with url: app_products_item_modifier_groups_path(@product), method: :post do
+      = render "app/products/items/modifier_group_fields", group: ModifierGroup.new
+      div class="modal-action"
+        button type="submit" class="btn btn-primary" = t("app.products.modifier_groups.create")

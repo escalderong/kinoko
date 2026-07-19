@@ -1,0 +1,21 @@
+div class="max-w-2xl mx-auto"
+  div class="flex items-center justify-between mb-4"
+    h1 class="text-xl font-bold" = t("app.products.categories.title")
+    button type="button" class="btn btn-primary" onclick="new_category_modal.showModal()"
+      = icon("plus", class: "text-sm")
+      = t("app.products.categories.new")
+
+  - if @categories.empty?
+    div class="card bg-base-100 border border-base-300" data-test="no-categories"
+      div class="card-body items-center text-center"
+        p class="text-base-content/70" = t("app.products.categories.empty")
+  - else
+    ul class="list bg-base-100 rounded-box border border-base-300"
+      - @categories.each do |category|
+        = render "app/products/categories/category", category: category
+
+  = render layout: "shared/modal", locals: { id: "new_category_modal", title: t("app.products.categories.new") } do
+    = form_with url: app_products_categories_path, method: :post do
+      = render "app/products/categories/fields", category: @category
+      div class="modal-action"
+        button type="submit" class="btn btn-primary" = t("app.products.categories.create")

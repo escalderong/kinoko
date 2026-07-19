@@ -10,7 +10,7 @@ RSpec.describe "App navbar", type: :request do
         get "/app/orders"
 
         expect(response.body).to include(app_orders_path)
-        expect(response.body).to include(app_product_categories_path)
+        expect(response.body).to include(app_products_categories_path)
       end
 
       it 'shows the tables navigation' do
@@ -31,7 +31,7 @@ RSpec.describe "App navbar", type: :request do
         get "/app/orders"
 
         expect(response.body).to include(app_orders_path)
-        expect(response.body).to include(app_product_categories_path)
+        expect(response.body).to include(app_products_categories_path)
       end
 
       it 'shows the tables navigation' do
@@ -52,7 +52,7 @@ RSpec.describe "App navbar", type: :request do
         get "/app/orders"
 
         expect(response.body).to include(app_orders_path)
-        expect(response.body).not_to include(app_product_categories_path)
+        expect(response.body).not_to include(app_products_categories_path)
       end
 
       it 'shows the tables navigation' do

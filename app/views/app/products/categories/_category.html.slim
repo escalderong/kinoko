@@ -1,0 +1,12 @@
+li class="list-row items-center" data-category-id=category.id
+  span class="text-xl text-base-content/80" = icon(category.icon)
+  div class="font-medium" = category.name
+  button type="button" class="btn btn-ghost btn-sm btn-square" onclick="edit_category_#{category.id}_modal.showModal()"
+    = icon("pen", class: "text-sm")
+  = button_to app_products_category_path(category), method: :delete, class: "btn btn-ghost btn-sm btn-square text-error", form: { class: "contents", data: { turbo_confirm: t("app.products.categories.delete_confirm") } } do
+    = icon("trash", class: "text-sm")
+  = render layout: "shared/modal", locals: { id: "edit_category_#{category.id}_modal", title: t("app.products.categories.edit") } do
+    = form_with url: app_products_category_path(category), method: :patch do
+      = render "app/products/categories/fields", category: category
+      div class="modal-action"
+        button type="submit" class="btn btn-primary" = t("app.products.categories.save")

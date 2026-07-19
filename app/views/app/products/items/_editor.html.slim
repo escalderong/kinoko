@@ -1,0 +1,36 @@
+div class="max-w-3xl mx-auto"
+  div class="flex items-center justify-between mb-4"
+    h1 class="text-xl font-bold" = t("app.products.items.title")
+    - if @categories.any?
+      button type="button" class="btn btn-primary" onclick="new_item_modal.showModal()"
+        = icon("plus", class: "text-sm")
+        = t("app.products.items.new")
+
+  - if @categories.empty?
+    div class="card bg-base-100 border border-base-300" data-test="no-items"
+      div class="card-body items-center text-center"
+        p class="text-base-content/70" = t("app.products.items.no_categories")
+        = link_to t("app.products.categories.new"), app_products_categories_path, class: "btn btn-primary btn-sm"
+  - elsif @products_by_category.empty?
+    div class="card bg-base-100 border border-base-300" data-test="no-items"
+      div class="card-body items-center text-center"
+        p class="text-base-content/70" = t("app.products.items.empty")
+  - else
+    div class="flex flex-col gap-6"
+      - @categories.each do |category|
+        - products = @products_by_category[category.id] || []
+        - next if products.empty?
+        section
+          h2 class="flex items-center gap-2 font-semibold mb-2"
+            = icon(category.icon, class: "text-base-content/70")
+            = category.name
+          ul class="list bg-base-100 rounded-box border border-base-300"
+            - products.each do |product|
+              = render "app/products/items/item", product: product, categories: @categories
+
+  - if @categories.any?
+    = render layout: "shared/modal", locals: { id: "new_item_modal", title: t("app.products.items.new") } do
+      = form_with url: app_products_items_path, method: :post do
+        = render "app/products/items/fields", product: @product, categories: @categories
+        div class="modal-action"
+          button type="submit" class="btn btn-primary" = t("app.products.items.create")

@@ -1,0 +1,17 @@
+li class="list-row items-center" data-item-id=product.id
+  div class="list-col-grow"
+    div class="font-medium" = product.name
+    div class="text-sm text-base-content/60" = product.base_price.format
+  - unless product.is_active
+    span class="badge badge-ghost badge-sm" = t("app.products.items.inactive")
+  = link_to edit_app_products_item_path(product), class: "btn btn-ghost btn-sm btn-square", aria: { label: t("app.products.variant_groups.title") }
+    = icon("sliders", class: "text-sm")
+  button type="button" class="btn btn-ghost btn-sm btn-square" onclick="edit_item_#{product.id}_modal.showModal()"
+    = icon("pen", class: "text-sm")
+  = button_to app_products_item_path(product), method: :delete, class: "btn btn-ghost btn-sm btn-square text-error", form: { class: "contents", data: { turbo_confirm: t("app.products.items.delete_confirm") } } do
+    = icon("trash", class: "text-sm")
+  = render layout: "shared/modal", locals: { id: "edit_item_#{product.id}_modal", title: t("app.products.items.edit") } do
+    = form_with url: app_products_item_path(product), method: :patch do
+      = render "app/products/items/fields", product: product, categories: categories
+      div class="modal-action"
+        button type="submit" class="btn btn-primary" = t("app.products.items.save")

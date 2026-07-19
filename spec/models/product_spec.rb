@@ -6,6 +6,7 @@ RSpec.describe Product, type: :model do
   it { is_expected.to have_field(:base_price).of_type(Money) }
 
   it { is_expected.to belong_to(:product_category) }
+  it { is_expected.to belong_to(:commerce) }
   it { is_expected.to have_many(:variant_groups) }
   it { is_expected.to have_many(:modifier_groups) }
 

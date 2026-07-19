@@ -11,9 +11,8 @@ module App::NavbarHelper
         policy_action: :view_products?,
         icon: "boxes-stacked",
         submenu: [
-          { key: "product_categories", path: app_product_categories_path },
-          { key: "product_variants",   path: app_product_variants_path },
-          { key: "product_modifiers",  path: app_product_modifiers_path }
+          { key: "product_categories", path: app_products_categories_path },
+          { key: "product_items",      path: app_products_items_path }
         ]
       ),
       NavItem.new(

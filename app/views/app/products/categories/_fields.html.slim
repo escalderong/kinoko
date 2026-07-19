@@ -1,0 +1,6 @@
+/ Shared category form fields (icon picker + name). Local: category.
+fieldset class="fieldset"
+  legend class="fieldset-legend" = t("app.products.categories.name")
+  div class="flex items-center gap-2"
+    = render "app/products/categories/icon_picker", category: category
+    = text_field_tag "product_category[name]", category.name, class: "input w-full"
