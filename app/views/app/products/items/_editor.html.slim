@@ -16,17 +16,19 @@ div class="max-w-3xl mx-auto"
       div class="card-body items-center text-center"
         p class="text-base-content/70" = t("app.products.items.empty")
   - else
-    div class="flex flex-col gap-6"
-      - @categories.each do |category|
-        - products = @products_by_category[category.id] || []
-        - next if products.empty?
-        section
-          h2 class="flex items-center gap-2 font-semibold mb-2"
+    div class="flex flex-col gap-2" data-controller="accordion"
+      - visible_categories = @categories.select { |category| (@products_by_category[category.id] || []).present? }
+      - visible_categories.each_with_index do |category, index|
+        - products = @products_by_category[category.id]
+        div class="collapse collapse-arrow bg-base-100 border border-base-300"
+          input type="radio" name="items_accordion" checked=(index.zero? ? "checked" : nil) data-accordion-target="input" data-action="pointerdown->accordion#markState click->accordion#toggle"
+          div class="collapse-title flex items-center gap-2 font-semibold"
             = icon(category.icon, class: "text-base-content/70")
             = category.name
-          ul class="list bg-base-100 rounded-box border border-base-300"
-            - products.each do |product|
-              = render "app/products/items/item", product: product, categories: @categories
+          div class="collapse-content"
+            ul class="list"
+              - products.each do |product|
+                = render "app/products/items/item", product: product, categories: @categories
 
   - if @categories.any?
     = render layout: "shared/modal", locals: { id: "new_item_modal", title: t("app.products.items.new") } do
