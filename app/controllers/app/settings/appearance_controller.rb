@@ -2,12 +2,12 @@ module App
   module Settings
     class AppearanceController < App::BaseController
       def show
-        @commerce = current_user.commerce
+        @commerce = current_commerce
         authorize @commerce, :settings?
       end
 
       def update
-        @commerce = current_user.commerce
+        @commerce = current_commerce
         authorize @commerce, :settings?
 
         if @commerce.update(appearance_params)

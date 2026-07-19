@@ -9,8 +9,8 @@ module App
       end
 
       def create
-        zone = current_user.commerce.floor_zones.find(params[:table][:floor_zone_id])
-        @table = zone.tables.new(table_params.merge(commerce: current_user.commerce, pos_x: zone.next_table_x, pos_y: 0))
+        zone = current_commerce.floor_zones.find(params[:table][:floor_zone_id])
+        @table = zone.tables.new(table_params.merge(commerce: current_commerce, pos_x: zone.next_table_x, pos_y: 0))
         authorize @table
 
         if @table.save
@@ -21,7 +21,7 @@ module App
       end
 
       def update
-        @table = current_user.commerce.tables.find(params[:id])
+        @table = current_commerce.tables.find(params[:id])
         authorize @table
 
         respond_to do |format|
@@ -38,7 +38,7 @@ module App
       end
 
       def destroy
-        @table = current_user.commerce.tables.find(params[:id])
+        @table = current_commerce.tables.find(params[:id])
         authorize @table
         @table.destroy
         redirect_to app_settings_tables_path(zone: @table.floor_zone_id)

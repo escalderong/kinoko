@@ -1,7 +1,7 @@
 module App
   class TablesController < App::BaseController
     def index
-      authorize current_user.commerce, :view_tables?
+      authorize current_commerce, :view_tables?
       @zones = policy_scope(FloorZone).asc(:position).to_a
       tables = policy_scope(Table).to_a
       @tables_by_zone = tables.group_by(&:floor_zone_id)

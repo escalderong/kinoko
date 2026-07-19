@@ -15,7 +15,7 @@ module App
 
     def authorize_section!
       policy_action = SECTION_AUTHORIZATIONS[@section]
-      authorize current_user.commerce, policy_action if policy_action
+      authorize current_commerce, policy_action if policy_action
     end
   end
 end

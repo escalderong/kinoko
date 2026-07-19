@@ -8,7 +8,7 @@ module App
       end
 
       def create
-        @category = current_user.commerce.product_categories.new(category_params)
+        @category = current_commerce.product_categories.new(category_params)
         authorize @category
 
         if @category.save
@@ -19,7 +19,7 @@ module App
       end
 
       def update
-        @category = current_user.commerce.product_categories.find(params[:id])
+        @category = current_commerce.product_categories.find(params[:id])
         authorize @category
 
         if @category.update(category_params)
@@ -30,7 +30,7 @@ module App
       end
 
       def destroy
-        @category = current_user.commerce.product_categories.find(params[:id])
+        @category = current_commerce.product_categories.find(params[:id])
         authorize @category
         @category.destroy
         redirect_to app_products_categories_path

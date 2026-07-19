@@ -2,7 +2,7 @@ module App::NavbarHelper
   NavItem = Struct.new(:key, :path, :policy_action, :icon, :submenu, keyword_init: true)
 
   def app_nav_items
-    commerce_policy = policy(current_user.commerce)
+    commerce_policy = policy(current_commerce)
     [
       NavItem.new(key: "tables", path: app_tables_path, policy_action: :view_tables?, icon: "chair"),
       NavItem.new(key: "orders", path: app_orders_path, policy_action: :view_orders?, icon: "receipt"),

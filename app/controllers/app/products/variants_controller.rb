@@ -25,7 +25,7 @@ module App
       private
 
       def product
-        @product ||= current_user.commerce.products.find(params[:item_id])
+        @product ||= current_commerce.products.find(params[:item_id])
       end
 
       def variant_group

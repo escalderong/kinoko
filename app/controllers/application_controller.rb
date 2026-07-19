@@ -6,9 +6,17 @@ class ApplicationController < ActionController::Base
 
   around_action :switch_locale
 
+  helper_method :current_commerce
+
   AVAILABLE_LOCALES = I18n.available_locales.map(&:to_s).freeze
 
   private
+
+  # Scopes the tenant without needing to hop through current_user in every
+  # controller. Memoized per-request since it's read repeatedly per action.
+  def current_commerce
+    @current_commerce ||= current_user&.commerce
+  end
 
   # Signed-in users carry their locale on the User record; the cookie exists
   # to remember that choice while signed out (e.g. on the login page after

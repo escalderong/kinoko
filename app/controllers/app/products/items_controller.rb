@@ -9,14 +9,14 @@ module App
       end
 
       def edit
-        @product = current_user.commerce.products.find(params[:id])
+        @product = current_commerce.products.find(params[:id])
         authorize @product
         @variant_groups = @product.variant_groups.to_a
         @modifier_groups = @product.modifier_groups.to_a
       end
 
       def create
-        @product = current_user.commerce.products.new(item_params)
+        @product = current_commerce.products.new(item_params)
         @product.product_category = scoped_category
         @product.base_price = parsed_price
         authorize @product
@@ -29,7 +29,7 @@ module App
       end
 
       def update
-        @product = current_user.commerce.products.find(params[:id])
+        @product = current_commerce.products.find(params[:id])
         authorize @product
         @product.assign_attributes(item_params)
         @product.product_category = scoped_category
@@ -43,7 +43,7 @@ module App
       end
 
       def destroy
-        @product = current_user.commerce.products.find(params[:id])
+        @product = current_commerce.products.find(params[:id])
         authorize @product
         @product.destroy
         redirect_to app_products_items_path
@@ -57,7 +57,7 @@ module App
 
       # Ensures the category belongs to the current commerce (404 otherwise).
       def scoped_category
-        current_user.commerce.product_categories.find(params[:product][:product_category_id])
+        current_commerce.product_categories.find(params[:product][:product_category_id])
       end
 
       def parsed_price
