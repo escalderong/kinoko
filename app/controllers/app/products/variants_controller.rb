@@ -4,7 +4,7 @@ module App
       def create
         authorize product, :update?
         variant = variant_group.variants.new(variant_params)
-        variant.price_delta = parsed_price_delta
+        variant.price_delta = parsed_price_delta || Money.new(0, Product::CURRENCY)
         persist(variant)
       end
 
@@ -12,7 +12,7 @@ module App
         authorize product, :update?
         variant = variant_group.variants.find(params[:id])
         variant.assign_attributes(variant_params)
-        variant.price_delta = parsed_price_delta
+        variant.price_delta = parsed_price_delta if parsed_price_delta
         persist(variant)
       end
 
@@ -33,10 +33,12 @@ module App
       end
 
       def variant_params
-        params.require(:variant).permit(:name, :sku)
+        params.require(:variant).permit(:name, :sku, :is_active)
       end
 
       def parsed_price_delta
+        return unless params[:variant].key?(:price_delta)
+
         amount = params.dig(:variant, :price_delta).presence || "0"
         Money.from_amount(BigDecimal(amount, exception: false) || 0, Product::CURRENCY)
       end

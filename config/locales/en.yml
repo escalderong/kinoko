@@ -134,9 +134,12 @@ en:
       variants:
         new: "Add variant"
         create: "Create"
+        edit: "Edit variant"
+        save: "Save"
         name: "Name"
         sku: "SKU"
         price_delta: "Price difference"
+        active: "Active"
         delete_confirm: "Delete this variant?"
       modifier_groups:
         title: "Modifier groups"
@@ -153,8 +156,14 @@ en:
       modifiers:
         new: "Add modifier"
         create: "Create"
+        edit: "Edit modifier"
+        save: "Save"
         name: "Name"
         price_delta: "Price difference"
+        active: "Active"
         delete_confirm: "Delete this modifier?"
     errors:
       not_authorized: "You are not allowed to do that."
+  errors:
+    messages:
+      exceeds_base_price: "cannot reduce the price by more than the item's base price"

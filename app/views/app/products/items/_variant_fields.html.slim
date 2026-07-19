@@ -7,4 +7,4 @@ fieldset class="fieldset"
   = text_field_tag "variant[sku]", variant.sku, class: "input w-full"
 fieldset class="fieldset"
   legend class="fieldset-legend" = t("app.products.variants.price_delta")
-  = number_field_tag "variant[price_delta]", variant.price_delta&.amount, min: "0", step: "0.01", class: "input w-full"
+  = number_field_tag "variant[price_delta]", variant.price_delta&.amount, step: "0.01", class: "input w-full"

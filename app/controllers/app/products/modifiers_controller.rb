@@ -4,7 +4,7 @@ module App
       def create
         authorize product, :update?
         modifier = modifier_group.modifiers.new(modifier_params)
-        modifier.price_delta = parsed_price_delta
+        modifier.price_delta = parsed_price_delta || Money.new(0, Product::CURRENCY)
         persist(modifier)
       end
 
@@ -12,7 +12,7 @@ module App
         authorize product, :update?
         modifier = modifier_group.modifiers.find(params[:id])
         modifier.assign_attributes(modifier_params)
-        modifier.price_delta = parsed_price_delta
+        modifier.price_delta = parsed_price_delta if parsed_price_delta
         persist(modifier)
       end
 
@@ -33,10 +33,12 @@ module App
       end
 
       def modifier_params
-        params.require(:modifier).permit(:name)
+        params.require(:modifier).permit(:name, :is_active)
       end
 
       def parsed_price_delta
+        return unless params[:modifier].key?(:price_delta)
+
         amount = params.dig(:modifier, :price_delta).presence || "0"
         Money.from_amount(BigDecimal(amount, exception: false) || 0, Product::CURRENCY)
       end

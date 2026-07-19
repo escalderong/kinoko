@@ -1,0 +1,17 @@
+/ Single variant row: name, sku, price, active toggle, edit, delete. Locals: product, group, variant.
+li class="list-row items-center #{'opacity-50' unless variant.is_active}" data-variant-id=variant.id
+  div class="list-col-grow" = variant.name
+  div class="text-sm text-base-content/60" = variant.sku
+  div class="text-sm text-base-content/60" = variant.price_delta.format
+  = form_with url: app_products_item_variant_group_variant_path(product, group, variant), method: :patch, class: "contents" do
+    = hidden_field_tag "variant[is_active]", "0"
+    = check_box_tag "variant[is_active]", "1", variant.is_active, class: "toggle toggle-sm toggle-primary", onchange: "this.form.requestSubmit()", aria: { label: t("app.products.variants.active") }
+  button type="button" class="btn btn-ghost btn-xs btn-square" onclick="edit_variant_#{variant.id}_modal.showModal()"
+    = icon("pen", class: "text-xs")
+  = button_to app_products_item_variant_group_variant_path(product, group, variant), method: :delete, class: "btn btn-ghost btn-xs btn-square text-error", form: { class: "contents", data: { turbo_confirm: t("app.products.variants.delete_confirm") } } do
+    = icon("trash", class: "text-xs")
+= render layout: "shared/modal", locals: { id: "edit_variant_#{variant.id}_modal", title: t("app.products.variants.edit") } do
+  = form_with url: app_products_item_variant_group_variant_path(product, group, variant), method: :patch do
+    = render "app/products/items/variant_fields", variant: variant
+    div class="modal-action"
+      button type="submit" class="btn btn-primary" = t("app.products.variants.save")

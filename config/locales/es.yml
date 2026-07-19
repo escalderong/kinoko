@@ -134,9 +134,12 @@ es:
       variants:
         new: "Agregar variante"
         create: "Crear"
+        edit: "Editar variante"
+        save: "Guardar"
         name: "Nombre"
         sku: "SKU"
         price_delta: "Diferencia de precio"
+        active: "Activo"
         delete_confirm: "¿Eliminar esta variante?"
       modifier_groups:
         title: "Grupos de modificadores"
@@ -153,8 +156,14 @@ es:
       modifiers:
         new: "Agregar modificador"
         create: "Crear"
+        edit: "Editar modificador"
+        save: "Guardar"
         name: "Nombre"
         price_delta: "Diferencia de precio"
+        active: "Activo"
         delete_confirm: "¿Eliminar este modificador?"
     errors:
       not_authorized: "No tienes permiso para realizar esta acción."
+  errors:
+    messages:
+      exceeds_base_price: "no puede reducir el precio en más que el precio base del producto"

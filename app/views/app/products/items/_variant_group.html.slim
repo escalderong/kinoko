@@ -12,13 +12,7 @@ div class="card bg-base-100 border border-base-300" data-variant-group-id=group.
           = icon("trash", class: "text-xs")
     - if group.variants.any?
       ul class="list"
-        - group.variants.each do |variant|
-          li class="list-row items-center" data-variant-id=variant.id
-            div class="list-col-grow" = variant.name
-            div class="text-sm text-base-content/60" = variant.sku
-            div class="text-sm text-base-content/60" = variant.price_delta.format
-            = button_to app_products_item_variant_group_variant_path(product, group, variant), method: :delete, class: "btn btn-ghost btn-xs btn-square text-error", form: { class: "contents", data: { turbo_confirm: t("app.products.variants.delete_confirm") } } do
-              = icon("trash", class: "text-xs")
+        = render partial: "app/products/items/variant", collection: group.variants, as: :variant, locals: { product: product, group: group }
     button type="button" class="btn btn-ghost btn-sm justify-start" onclick="new_variant_#{group.id}_modal.showModal()"
       = icon("plus", class: "text-xs")
       = t("app.products.variants.new")

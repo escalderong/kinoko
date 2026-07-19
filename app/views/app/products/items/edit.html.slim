@@ -3,7 +3,7 @@ div class="max-w-3xl mx-auto"
     = link_to app_products_items_path, class: "btn btn-ghost btn-sm btn-square", aria: { label: t("app.products.items.title") }
       = icon("arrow-left", class: "text-sm")
     h1 class="text-xl font-bold" = @product.name
-  p class="text-base-content/60 mb-6" = @product.base_price.format
+  p class="text-base-content/60 my-2" = @product.base_price.format
 
   section class="mb-8"
     div class="flex items-center justify-between mb-3"

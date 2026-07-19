@@ -4,4 +4,4 @@ fieldset class="fieldset"
   = text_field_tag "modifier[name]", modifier.name, class: "input w-full"
 fieldset class="fieldset"
   legend class="fieldset-legend" = t("app.products.modifiers.price_delta")
-  = number_field_tag "modifier[price_delta]", modifier.price_delta&.amount, min: "0", step: "0.01", class: "input w-full"
+  = number_field_tag "modifier[price_delta]", modifier.price_delta&.amount, step: "0.01", class: "input w-full"

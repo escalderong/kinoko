@@ -12,12 +12,7 @@ div class="card bg-base-100 border border-base-300" data-modifier-group-id=group
           = icon("trash", class: "text-xs")
     - if group.modifiers.any?
       ul class="list"
-        - group.modifiers.each do |modifier|
-          li class="list-row items-center" data-modifier-id=modifier.id
-            div class="list-col-grow" = modifier.name
-            div class="text-sm text-base-content/60" = modifier.price_delta.format
-            = button_to app_products_item_modifier_group_modifier_path(product, group, modifier), method: :delete, class: "btn btn-ghost btn-xs btn-square text-error", form: { class: "contents", data: { turbo_confirm: t("app.products.modifiers.delete_confirm") } } do
-              = icon("trash", class: "text-xs")
+        = render partial: "app/products/items/modifier", collection: group.modifiers, as: :modifier, locals: { product: product, group: group }
     button type="button" class="btn btn-ghost btn-sm justify-start" onclick="new_modifier_#{group.id}_modal.showModal()"
       = icon("plus", class: "text-xs")
       = t("app.products.modifiers.new")

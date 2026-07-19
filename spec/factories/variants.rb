@@ -4,5 +4,6 @@ FactoryBot.define do
     name { "Large" }
     sequence(:sku) { |n| "SKU-#{n}" }
     price_delta { Money.new(0, "COP") }
+    is_active { true }
   end
 end

@@ -72,8 +72,8 @@ RSpec.describe "App::Products::Items", type: :request do
           }
         end.to change { user.commerce.products.count }.by(1)
 
-        expect(response).to redirect_to(app_products_items_path)
         product = user.commerce.products.last
+        expect(response).to redirect_to(edit_app_products_item_path(product))
         expect(product.name).to eq("Fries")
         expect(product.base_price).to eq(Money.from_amount(8000, "COP"))
         expect(product.product_category).to eq(category)

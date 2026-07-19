@@ -22,7 +22,7 @@ module App
         authorize @product
 
         if @product.save
-          redirect_to app_products_items_path
+          redirect_to edit_app_products_item_path(@product)
         else
           redirect_to app_products_items_path, flash: { error: @product.errors.full_messages.to_sentence }
         end

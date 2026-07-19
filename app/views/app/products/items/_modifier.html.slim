@@ -1,0 +1,16 @@
+/ Single modifier row: name, price, active toggle, edit, delete. Locals: product, group, modifier.
+li class="list-row items-center #{'opacity-50' unless modifier.is_active}" data-modifier-id=modifier.id
+  div class="list-col-grow" = modifier.name
+  div class="text-sm text-base-content/60" = modifier.price_delta.format
+  = form_with url: app_products_item_modifier_group_modifier_path(product, group, modifier), method: :patch, class: "contents" do
+    = hidden_field_tag "modifier[is_active]", "0"
+    = check_box_tag "modifier[is_active]", "1", modifier.is_active, class: "toggle toggle-sm toggle-primary", onchange: "this.form.requestSubmit()", aria: { label: t("app.products.modifiers.active") }
+  button type="button" class="btn btn-ghost btn-xs btn-square" onclick="edit_modifier_#{modifier.id}_modal.showModal()"
+    = icon("pen", class: "text-xs")
+  = button_to app_products_item_modifier_group_modifier_path(product, group, modifier), method: :delete, class: "btn btn-ghost btn-xs btn-square text-error", form: { class: "contents", data: { turbo_confirm: t("app.products.modifiers.delete_confirm") } } do
+    = icon("trash", class: "text-xs")
+= render layout: "shared/modal", locals: { id: "edit_modifier_#{modifier.id}_modal", title: t("app.products.modifiers.edit") } do
+  = form_with url: app_products_item_modifier_group_modifier_path(product, group, modifier), method: :patch do
+    = render "app/products/items/modifier_fields", modifier: modifier
+    div class="modal-action"
+      button type="submit" class="btn btn-primary" = t("app.products.modifiers.save")

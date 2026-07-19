@@ -109,6 +109,33 @@ RSpec.describe "App::Products item editor (variants & modifiers)", type: :reques
       expect(variant.price_delta).to eq(Money.from_amount(500, "COP"))
     end
 
+    it "updates a variant" do
+      variant = create(:variant, variant_group: group, name: "Small", sku: "SM-1", price_delta: Money.new(0, "COP"))
+
+      patch "/app/products/items/#{product.id}/variant_groups/#{group.id}/variants/#{variant.id}", params: {
+        variant: { name: "Large", sku: "LG-1", price_delta: "700" }
+      }
+
+      expect(response).to redirect_to(edit_app_products_item_path(product))
+      variant.reload
+      expect(variant.name).to eq("Large")
+      expect(variant.sku).to eq("LG-1")
+      expect(variant.price_delta).to eq(Money.from_amount(700, "COP"))
+    end
+
+    it "toggles a variant's active status without touching its price_delta" do
+      variant = create(:variant, variant_group: group, price_delta: Money.from_amount(500, "COP"), is_active: true)
+
+      patch "/app/products/items/#{product.id}/variant_groups/#{group.id}/variants/#{variant.id}", params: {
+        variant: { is_active: "0" }
+      }
+
+      expect(response).to redirect_to(edit_app_products_item_path(product))
+      variant.reload
+      expect(variant.is_active).to be false
+      expect(variant.price_delta).to eq(Money.from_amount(500, "COP"))
+    end
+
     it "destroys a variant" do
       variant = create(:variant, variant_group: group)
 
@@ -153,6 +180,32 @@ RSpec.describe "App::Products item editor (variants & modifiers)", type: :reques
       end.to change { group.reload.modifiers.count }.by(1)
 
       expect(response).to redirect_to(edit_app_products_item_path(product))
+    end
+
+    it "updates a modifier" do
+      modifier = create(:modifier, modifier_group: group, name: "No pickles", price_delta: Money.new(0, "COP"))
+
+      patch "/app/products/items/#{product.id}/modifier_groups/#{group.id}/modifiers/#{modifier.id}", params: {
+        modifier: { name: "No onions", price_delta: "200" }
+      }
+
+      expect(response).to redirect_to(edit_app_products_item_path(product))
+      modifier.reload
+      expect(modifier.name).to eq("No onions")
+      expect(modifier.price_delta).to eq(Money.from_amount(200, "COP"))
+    end
+
+    it "toggles a modifier's active status without touching its price_delta" do
+      modifier = create(:modifier, modifier_group: group, price_delta: Money.from_amount(200, "COP"), is_active: true)
+
+      patch "/app/products/items/#{product.id}/modifier_groups/#{group.id}/modifiers/#{modifier.id}", params: {
+        modifier: { is_active: "0" }
+      }
+
+      expect(response).to redirect_to(edit_app_products_item_path(product))
+      modifier.reload
+      expect(modifier.is_active).to be false
+      expect(modifier.price_delta).to eq(Money.from_amount(200, "COP"))
     end
   end
 end
