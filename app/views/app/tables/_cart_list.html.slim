@@ -1,0 +1,15 @@
+/ Running list of items selected from the catalog but not yet submitted, plus
+/ the hidden field the form actually submits. Rendered by
+/ order_cart_controller.js — no locals needed, purely structural (must sit
+/ inside the same data-controller="order-cart" ancestor as the catalog it's
+/ paired with, and inside the <form> that owns the hidden field).
+div
+  p data-order-cart-target="cartEmpty" class="text-sm text-base-content/60" = t("app.tables.orders.cart_empty")
+  ul class="list" data-order-cart-target="cartList"
+= hidden_field_tag "cart", "[]", data: { order_cart_target: "cartField" }
+
+template data-order-cart-target="itemTemplate"
+  li class="list-row items-center"
+    div class="list-col-grow" data-order-cart-target="itemLabel"
+    button type="button" class="btn btn-ghost btn-sm btn-square text-error" data-order-cart-target="removeButton" data-action="click->order-cart#removeFromCart"
+      = icon("xmark", class: "text-sm")

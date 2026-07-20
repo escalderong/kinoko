@@ -35,4 +35,90 @@ RSpec.describe Order, type: :model do
       expect(described_class.open.to_a).to eq([ open_order ])
     end
   end
+
+  describe '.open_for' do
+    it 'returns the open order for the given table' do
+      table = create(:table)
+      order = create(:order, table: table, status: :open)
+      create(:order, table: table, status: :closed)
+      create(:order, status: :open) # a different table entirely
+
+      expect(described_class.open_for(table).to_a).to eq([ order ])
+    end
+
+    it 'returns none when the table has no open order' do
+      table = create(:table)
+      create(:order, table: table, status: :closed)
+
+      expect(described_class.open_for(table).to_a).to eq([])
+    end
+  end
+
+  describe 'one open order per table (database-enforced)' do
+    it 'rejects a second open order for a table that already has one, even bypassing application code' do
+      table = create(:table)
+      create(:order, table: table, status: :open)
+
+      expect do
+        described_class.create!(table: table, opened_at: Time.current)
+      end.to raise_error(Mongo::Error::OperationFailure, /E11000/)
+    end
+
+    it 'allows a new open order once the previous one is closed' do
+      table = create(:table)
+      create(:order, table: table, status: :closed)
+
+      expect do
+        described_class.create!(table: table, opened_at: Time.current)
+      end.not_to raise_error
+    end
+
+    it 'allows open orders on two different tables at the same time' do
+      create(:order, table: create(:table), status: :open)
+
+      expect do
+        described_class.create!(table: create(:table), opened_at: Time.current)
+      end.not_to raise_error
+    end
+  end
+
+  describe 'table broadcasting' do
+    it 'broadcasts a table replace to the commerce stream on create' do
+      table = create(:table)
+      allow(Turbo::StreamsChannel).to receive(:broadcast_replace_to)
+
+      order = create(:order, table: table)
+
+      expect(Turbo::StreamsChannel).to have_received(:broadcast_replace_to).with(
+        "commerce_#{table.commerce_id}_tables",
+        target: ActionView::RecordIdentifier.dom_id(table),
+        partial: "app/tables/table",
+        locals: { table: table, open: true }
+      )
+    end
+
+    it 'broadcasts a table replace to the commerce stream on destroy' do
+      table = create(:table)
+      order = create(:order, table: table)
+
+      expect(Turbo::StreamsChannel).to receive(:broadcast_replace_to).with(
+        "commerce_#{table.commerce_id}_tables",
+        target: ActionView::RecordIdentifier.dom_id(table),
+        partial: "app/tables/table",
+        locals: { table: table, open: false }
+      )
+
+      order.destroy
+    end
+
+    it 'does not fail the create when the broadcast itself raises' do
+      table = create(:table)
+      allow(Turbo::StreamsChannel).to receive(:broadcast_replace_to).and_raise(StandardError, "redis down")
+
+      expect do
+        create(:order, table: table)
+      end.not_to raise_error
+      expect(Order.where(table_id: table.id).count).to eq(1)
+    end
+  end
 end

@@ -55,6 +55,12 @@ RSpec.describe User, type: :model do
       expect(user.waiter?).to be true
       expect(user.owner?).to be false
     end
+
+    it 'returns true for cashier? when role is cashier' do
+      user = build(:user, role: :cashier)
+      expect(user.cashier?).to be true
+      expect(user.owner?).to be false
+    end
   end
 
   describe 'devise :validatable' do

@@ -1,0 +1,48 @@
+/ Hidden variant/modifier selection panel for one product, revealed by
+/ order_cart_controller when its row is clicked. Locals: product:, table:.
+/ Radio group names include table.id: this partial renders once per product
+/ but the whole picker renders once per table on the same page, so radios
+/ must not cross-select between different tables' hidden modals.
+div class="hidden card bg-base-100 border border-base-300 mt-2" data-order-cart-target="panel" data-product-id=product.id data-product-name=product.name
+  div class="card-body gap-3"
+    div class="font-semibold" = product.name
+
+    - product.variant_groups.to_a.each do |group|
+      - active_variants = group.variants.select(&:is_active)
+      - next if active_variants.empty?
+      fieldset class="fieldset" data-order-cart-target="variantGroup" data-group-required=group.is_required
+        legend class="fieldset-legend"
+          = group.name
+          - if group.is_required
+            span class="badge badge-sm badge-neutral ms-1" = t("app.products.variant_groups.required")
+        - active_variants.each do |variant|
+          label class="label cursor-pointer justify-start gap-3"
+            input type="radio" name="variant_group_#{group.id}_#{table.id}" value=variant.id class="radio radio-primary" data-option-name="#{group.name}: #{variant.name}" data-action="change->order-cart#validate"
+            span = variant.name
+            - unless variant.price_delta.zero?
+              span class="text-sm text-base-content/60" = "+#{variant.price_delta.format}"
+
+    - product.modifier_groups.to_a.each do |group|
+      - active_modifiers = group.modifiers.select(&:is_active)
+      - next if active_modifiers.empty?
+      fieldset class="fieldset" data-order-cart-target="modifierGroup" data-group-required=group.is_required data-group-min=group.min_selected data-group-max=group.max_selected
+        legend class="fieldset-legend"
+          = group.name
+          - if group.is_required
+            span class="badge badge-sm badge-neutral ms-1" = t("app.products.modifier_groups.required")
+        - active_modifiers.each do |modifier|
+          label class="label cursor-pointer justify-start gap-3"
+            input type="checkbox" value=modifier.id class="checkbox checkbox-primary" data-option-name="#{group.name}: #{modifier.name}" data-action="change->order-cart#validate"
+            span = modifier.name
+            - unless modifier.price_delta.zero?
+              span class="text-sm text-base-content/60" = "+#{modifier.price_delta.format}"
+
+    fieldset class="fieldset"
+      legend class="fieldset-legend" = t("app.tables.orders.quantity")
+      input type="number" min="1" value="1" class="input w-24" data-order-cart-target="quantityInput"
+
+    p class="hidden text-error text-sm" data-order-cart-target="hint" = t("app.tables.orders.requirements_hint")
+
+    button type="button" class="btn btn-primary" data-order-cart-target="addButton" data-action="click->order-cart#addToCart"
+      = icon("plus", class: "text-sm")
+      = t("app.tables.orders.add_to_cart")

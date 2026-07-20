@@ -1,0 +1,5 @@
+= turbo_frame_tag "table_#{@table.id}_frame" do
+  - if @order.present?
+    = render "app/tables/order_details", table: @table, order: @order
+  - else
+    = render "app/tables/new_order", table: @table

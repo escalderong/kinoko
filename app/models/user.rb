@@ -39,7 +39,7 @@ class User
   field :name, type: String
   field :locale, type: String, default: -> { I18n.default_locale.to_s }
 
-  as_enum :role, { owner: 0, admin: 1, waiter: 2 }
+  as_enum :role, { owner: 0, admin: 1, waiter: 2, cashier: 3 }
 
   validates_presence_of :name
   validates_presence_of :role

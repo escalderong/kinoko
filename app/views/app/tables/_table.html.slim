@@ -1,9 +1,35 @@
-- state_classes = open ? "bg-warning/20 border-warning/40 cursor-default" : "bg-base-200 border-base-content/20 hover:border-primary cursor-pointer transition-colors"
-- modal_id = "new_order_#{table.id}_modal"
-div class="absolute rounded-box border-2 flex items-center justify-center select-none #{state_classes}" style=table_rect_style(table) data-table-number=table.number title=(open ? t("app.tables.open_order") : nil) data-test=(open ? "table-open" : nil) onclick=(open ? nil : "#{modal_id}.showModal()")
-  div class="text-center pointer-events-none"
-    div class="font-bold leading-none" = table.number
-    div class="text-xs text-base-content/70" = "#{table.capacity}p"
-- unless open
-  = render layout: "shared/modal", locals: { id: modal_id, title: t("app.tables.new_order_for_table", number: table.number) } do
-    p = t("app.tables.new_order_placeholder")
+- table_classes = "rounded-box border-2 flex items-center justify-center select-none bg-base-200 border-base-content/20 hover:border-primary cursor-pointer transition-colors"
+- modal_id = "table_#{table.id}_modal"
+- modal_title = open ? t("app.tables.existing_order_for_table", number: table.number) : t("app.tables.new_order_for_table", number: table.number)
+/ The broadcast target must be a SINGLE element wrapping the tile AND every
+/ modal dialog it owns. Turbo's `replace` only swaps the exact element it
+/ targets — if the dialogs were siblings instead of nested here, each
+/ broadcast would leave the previous ones orphaned in the DOM. Two <dialog>
+/ elements sharing the same id makes the browser's window[id] lookup return
+/ an HTMLCollection instead of the element, so `onclick="ID.showModal()"`
+/ breaks with "showModal is not a function" — which read as the table
+/ becoming unclickable after a live update from another viewer.
+div id=dom_id(table) class="contents"
+  - if open
+    / Aura pads itself around its single child (that's the ring/glow effect),
+    / which would otherwise shrink the table div if both the position AND the
+    / table's own footprint lived on the same element. So the wrapper here
+    / only anchors the grid position — no width/height — letting aura grow
+    / beyond the table's own fixed-size box (set via table_size_style)
+    / instead of squeezing that box down to fit inside its padding.
+    div class="absolute" style=table_position_style(table)
+      div class="aura aura-gold"
+        div class=table_classes style=table_size_style(table) data-table-number=table.number title=t("app.tables.open_order") data-test="table-open" onclick="#{modal_id}.showModal()"
+          div class="text-center pointer-events-none text-base-content"
+            div class="font-bold leading-none" = table.number
+            div class="text-xs text-base-content/70" = "#{table.capacity}p"
+  - else
+    div class="absolute #{table_classes}" style=table_rect_style(table) data-table-number=table.number onclick="#{modal_id}.showModal()"
+      div class="text-center pointer-events-none text-base-content"
+        div class="font-bold leading-none" = table.number
+        div class="text-xs text-base-content/70" = "#{table.capacity}p"
+
+  = render layout: "shared/modal", locals: { id: modal_id, title: modal_title, box_class: "w-11/12 max-w-5xl" } do
+    = turbo_frame_tag "table_#{table.id}_frame", src: app_table_path(table), loading: "lazy" do
+      div class="flex justify-center p-8"
+        span class="loading loading-spinner loading-lg"

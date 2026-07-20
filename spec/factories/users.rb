@@ -13,5 +13,9 @@ FactoryBot.define do
     trait :admin do
       role { :admin }
     end
+
+    trait :cashier do
+      role { :cashier }
+    end
   end
 end

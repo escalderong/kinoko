@@ -49,4 +49,37 @@ RSpec.describe OrderItem, type: :model do
       expect(order_item.complete_item_price).to eq(Money.new(14_000, "COP"))
     end
   end
+
+  describe 'table broadcasting' do
+    it 'broadcasts a table replace to the commerce stream on create' do
+      table = create(:table)
+      allow(Turbo::StreamsChannel).to receive(:broadcast_replace_to)
+      order = create(:order, table: table)
+
+      expect(Turbo::StreamsChannel).to receive(:broadcast_replace_to).with(
+        "commerce_#{table.commerce_id}_tables",
+        target: ActionView::RecordIdentifier.dom_id(table),
+        partial: "app/tables/table",
+        locals: { table: table, open: true }
+      )
+
+      create(:order_item, order: order)
+    end
+
+    it 'broadcasts a table replace to the commerce stream on destroy' do
+      table = create(:table)
+      allow(Turbo::StreamsChannel).to receive(:broadcast_replace_to)
+      order = create(:order, table: table)
+      order_item = create(:order_item, order: order)
+
+      expect(Turbo::StreamsChannel).to receive(:broadcast_replace_to).with(
+        "commerce_#{table.commerce_id}_tables",
+        target: ActionView::RecordIdentifier.dom_id(table),
+        partial: "app/tables/table",
+        locals: { table: table, open: true }
+      )
+
+      order_item.destroy
+    end
+  end
 end

@@ -1,0 +1,54 @@
+/ Existing-order layout: catalog on the left, current items + the running
+/ "add items" cart in the middle, elapsed time/total/checkout on the right.
+/ Locals: table:, order:.
+- checkout_modal_id = "checkout_#{table.id}_modal"
+- show_checkout = policy(order).checkout?
+
+= form_with url: app_table_order_items_path(table), method: :post, class: "contents" do
+  div class="flex flex-col lg:flex-row gap-4" data-controller="order-cart"
+    div class="flex-1 min-w-0"
+      h4 class="font-semibold mb-2" = t("app.tables.orders.catalog")
+      = render "app/tables/catalog", table: table
+
+    div class="divider divider-horizontal hidden lg:flex"
+
+    div class="flex-1 min-w-0 flex flex-col gap-2"
+      h4 class="font-semibold mb-2" = t("app.tables.orders.current_items")
+      - if order.order_items.empty?
+        p class="text-sm text-base-content/60" = t("app.tables.orders.no_items_yet")
+      - else
+        ul class="list"
+          - order.order_items.each do |order_item|
+            li class="list-row items-center"
+              div class="list-col-grow"
+                div class="font-medium" = "#{order_item.quantity}x #{order_item.product_name}"
+                - order_item.order_item_variants.each do |variant|
+                  div class="text-xs text-base-content/60" = order_item_option_label(variant.variant_group_name, variant.variant_name, variant.price_delta)
+                - order_item.order_item_modifiers.each do |modifier|
+                  div class="text-xs text-base-content/60" = order_item_option_label(modifier.modifier_group_name, modifier.modifier_name, modifier.price_delta)
+              div class="font-medium" = order_item.complete_item_price.format
+
+      div class="divider" = t("app.tables.orders.add_items")
+      = render "app/tables/cart_list"
+      button type="submit" class="btn btn-primary mt-2" disabled="disabled" data-order-cart-target="submitButton" = t("app.tables.orders.add_items")
+
+    div class="divider divider-horizontal hidden lg:flex"
+
+    div class="flex flex-col gap-4 lg:w-48 shrink-0"
+      div class="stats stats-vertical shadow-none bg-transparent"
+        div class="stat px-0 py-2"
+          div class="stat-title" = t("app.tables.orders.open_for")
+          div class="stat-value text-lg" = distance_of_time_in_words(order.opened_at, Time.current)
+        div class="stat px-0 py-2"
+          div class="stat-title" = t("app.tables.orders.current_total")
+          div class="stat-value text-lg" = order.total.format
+
+      - if show_checkout
+        div class="modal-action mt-auto"
+          button type="button" class="btn btn-primary" onclick="#{checkout_modal_id}.showModal()" = t("app.tables.orders.checkout")
+
+- if show_checkout
+  = render layout: "shared/modal", locals: { id: checkout_modal_id, title: t("app.tables.orders.checkout") } do
+    p = t("app.tables.orders.checkout_placeholder")
+    div class="modal-action"
+      button type="button" class="btn btn-ghost" onclick="#{checkout_modal_id}.close()" = t("app.tables.cancel")

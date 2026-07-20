@@ -1,6 +1,8 @@
-/ daisyUI modal wrapper. Pass `id` and `title`; yield the form/fields as the body.
+/ daisyUI modal wrapper. Pass `id` and `title`; yield the form/fields as the
+/ body. `box_class:` is optional — extra classes appended to modal-box, e.g.
+/ for a wider multi-column layout.
 dialog id=id class="modal"
-  div class="modal-box"
+  div class="modal-box #{local_assigns[:box_class]}"
     form method="dialog"
       button class="btn btn-circle btn-ghost absolute right-3 top-3" aria-label=t("app.modal.close")
         = icon("xmark")

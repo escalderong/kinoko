@@ -8,5 +8,12 @@ module App
       @active_zone = @zones.find { |zone| zone.id.to_s == params[:zone].to_s } || @zones.first
       @open_table_ids = Order.open.where(:table_id.in => tables.map(&:id)).distinct(:table_id).to_set
     end
+
+    def show
+      authorize current_commerce, :view_tables?
+      @table = policy_scope(Table).find(params[:id])
+      @order = Order.open_for(@table).includes(order_items: %i[order_item_variants order_item_modifiers]).first
+      render layout: false if turbo_frame_request?
+    end
   end
 end

@@ -17,7 +17,7 @@ gem "jbuilder"
 # Slim templating engine for views [https://github.com/slim-template/slim-rails]
 gem "slim-rails"
 # Use Redis adapter to run Action Cable in production
-# gem "redis", ">= 4.0.1"
+gem "redis", ">= 4.0.1"
 
 gem "mongoid", "~> 8.0"
 
@@ -44,6 +44,11 @@ gem "pundit", "~> 2.5.2"
 
 gem "money-rails", "~> 3.0.0"
 
+# Translations for Rails' own built-in strings (distance_of_time_in_words,
+# number/date formatting, ActiveModel validation messages, ...) across many
+# locales, including Spanish [https://github.com/svenfuchs/rails-i18n]
+gem "rails-i18n", "~> 8.0"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
@@ -64,6 +69,9 @@ group :development do
 
   # Per-request profiling badge/timeline [https://github.com/MiniProfiler/rack-mini-profiler]
   gem "rack-mini-profiler"
+
+  # Detects N+1 queries and unused eager loading [https://github.com/flyerhzm/bullet]
+  gem "bullet"
 end
 
 group :test do
