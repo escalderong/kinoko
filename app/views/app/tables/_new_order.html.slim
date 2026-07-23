@@ -1,10 +1,11 @@
 / New-order layout: catalog on the left, running cart + confirm button on the
-/ right. No actions column — there's no order yet to check out. Locals: table:.
+/ right. No actions column — there's no order yet to check out.
+/ Locals: table:, catalog_entries:.
 = form_with url: app_table_orders_path(table), method: :post, class: "contents" do
   div class="flex flex-col md:flex-row gap-4" data-controller="order-cart"
     div class="flex-1 min-w-0"
       h4 class="font-semibold mb-2" = t("app.tables.orders.catalog")
-      = render "app/tables/catalog", table: table
+      = render "app/tables/catalog", table: table, catalog_entries: catalog_entries
 
     div class="divider divider-horizontal hidden md:flex"
 

@@ -13,6 +13,7 @@ module App
       authorize current_commerce, :view_tables?
       @table = policy_scope(Table).find(params[:id])
       @order = Order.open_for(@table).includes(order_items: %i[order_item_variants order_item_modifiers]).first
+      @catalog_entries = CatalogQuery.new(current_commerce).visible_entries
       render layout: false if turbo_frame_request?
     end
   end

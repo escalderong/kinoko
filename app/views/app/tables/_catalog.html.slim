@@ -1,41 +1,32 @@
-/ Category accordion + per-product variant/modifier panels. Locals: table:.
+/ Category accordion + per-product variant/modifier panels. Pure display —
+/ fetching/filtering the catalog is CatalogQuery's job, called once from
+/ TablesController#show. Locals: table:, catalog_entries: (CatalogQuery::Entry
+/ array, already scoped to the commerce and filtered to non-empty categories).
 / No form, no cart, no data-controller="order-cart" here — this renders
 / inside a parent that already owns that controller (see _new_order.html.slim
 / and _order_details.html.slim), since the cart list and submit button need
 / to be reachable by the same controller instance regardless of which column
 / they end up in.
-/ Uses `current_commerce` (already memoized from `authorize current_commerce,
-/ :view_tables?` in TablesController#show), not `table.commerce` — the two
-/ are always the same commerce (policy_scope enforces it), but `table.commerce`
-/ would fire its own separate, redundant query for a document already loaded.
 - accordion_name = "order_accordion_#{table.id}"
-- categories = current_commerce.product_categories.asc(:name).to_a
-/ .includes batches each association into one `$in` query instead of one
-/ query per product per group — MongoDB has no SQL-style join, this is the
-/ Mongoid-idiomatic way to avoid N+1 across referenced (non-embedded)
-/ collections.
-- products_by_category = current_commerce.products.where(is_active: true).includes(variant_groups: :variants, modifier_groups: :modifiers).asc(:name).to_a.group_by(&:product_category_id)
-- visible_categories = categories.select { |category| (products_by_category[category.id] || []).present? }
 
-- if visible_categories.empty?
+- if catalog_entries.empty?
   p class="text-base-content/70" = t("app.tables.orders.no_products")
 - else
   div class="flex flex-col gap-2 max-h-[60vh] overflow-y-auto pr-1" data-controller="accordion"
-    - visible_categories.each_with_index do |category, index|
-      - products = products_by_category[category.id]
+    - catalog_entries.each_with_index do |entry, index|
       div class="collapse collapse-arrow bg-base-100 border border-base-300"
         input type="radio" name=accordion_name checked=(index.zero? ? "checked" : nil) data-accordion-target="input" data-action="pointerdown->accordion#markState click->accordion#toggle"
         div class="collapse-title flex items-center gap-2 font-semibold"
-          = icon(category.icon, class: "text-base-content/70")
-          = category.name
+          = icon(entry.category.icon, class: "text-base-content/70")
+          = entry.category.name
         div class="collapse-content"
           ul class="list"
-            - products.each do |product|
+            - entry.products.each do |product|
               li class="list-row items-center cursor-pointer" data-product-id=product.id data-action="click->order-cart#selectProduct"
                 div class="list-col-grow"
                   div class="font-medium" = product.name
                   div class="text-sm text-base-content/60" = product.base_price.format
                 = icon("chevron-right", class: "text-base-content/40 text-sm")
 
-  - visible_categories.flat_map { |category| products_by_category[category.id] }.each do |product|
+  - catalog_entries.flat_map(&:products).each do |product|
     = render "app/tables/product_panel", product: product, table: table

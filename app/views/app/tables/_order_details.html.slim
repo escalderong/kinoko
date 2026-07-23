@@ -1,6 +1,6 @@
 / Existing-order layout: catalog on the left, current items + the running
 / "add items" cart in the middle, elapsed time/total/checkout on the right.
-/ Locals: table:, order:.
+/ Locals: table:, order:, catalog_entries:.
 - checkout_modal_id = "checkout_#{table.id}_modal"
 - show_checkout = policy(order).checkout?
 
@@ -8,7 +8,7 @@
   div class="flex flex-col lg:flex-row gap-4" data-controller="order-cart"
     div class="flex-1 min-w-0"
       h4 class="font-semibold mb-2" = t("app.tables.orders.catalog")
-      = render "app/tables/catalog", table: table
+      = render "app/tables/catalog", table: table, catalog_entries: catalog_entries
 
     div class="divider divider-horizontal hidden lg:flex"
 
