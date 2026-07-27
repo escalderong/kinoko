@@ -71,7 +71,9 @@ RSpec.describe "App::Tables", type: :request do
         doc = Nokogiri::HTML(response.body)
         table_node = doc.at_css(%([data-table-number="7"]))
 
-        expect(table_node["onclick"]).to include("table_#{table.id}_modal")
+        expect(table_node["href"]).to eq(app_table_path(table))
+        expect(table_node["data-turbo-frame"]).to eq("table_#{table.id}_frame")
+        expect(table_node["data-action"]).to eq("click->dialog#open")
         expect(table_node["data-test"]).to eq("table-open")
         expect(response.body).to include("table_#{table.id}_modal")
         expect(response.body).to include(I18n.t("app.tables.existing_order_for_table", number: table.number))
@@ -91,7 +93,9 @@ RSpec.describe "App::Tables", type: :request do
         doc = Nokogiri::HTML(response.body)
         table_node = doc.at_css(%([data-table-number="8"]))
 
-        expect(table_node["onclick"]).to include("table_#{table.id}_modal")
+        expect(table_node["href"]).to eq(app_table_path(table))
+        expect(table_node["data-turbo-frame"]).to eq("table_#{table.id}_frame")
+        expect(table_node["data-action"]).to eq("click->dialog#open")
         expect(response.body).to include("table_#{table.id}_modal")
         expect(response.body).to include(I18n.t("app.tables.new_order_for_table", number: table.number))
       end
@@ -109,7 +113,9 @@ RSpec.describe "App::Tables", type: :request do
         doc = Nokogiri::HTML(response.body)
         table_node = doc.at_css(%([data-table-number="9"]))
 
-        expect(table_node["onclick"]).to include("table_#{table.id}_modal")
+        expect(table_node["href"]).to eq(app_table_path(table))
+        expect(table_node["data-turbo-frame"]).to eq("table_#{table.id}_frame")
+        expect(table_node["data-action"]).to eq("click->dialog#open")
         expect(response.body).to include("table_#{table.id}_modal")
         expect(response.body).to include(I18n.t("app.tables.new_order_for_table", number: table.number))
       end
