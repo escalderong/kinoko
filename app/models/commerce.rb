@@ -1,7 +1,4 @@
-class Commerce
-  include Mongoid::Document
-  include Mongoid::Timestamps
-
+class Commerce < ApplicationRecord
   # Curated set of daisyUI 5 themes offered by the appearance picker. This list
   # is the single source of truth for the picker and the inclusion validation,
   # and must stay in sync with the `themes:` list compiled in
@@ -14,15 +11,12 @@ class Commerce
 
   DEFAULT_THEME = "light"
 
-  field :name, type: String
-  field :theme, type: String, default: DEFAULT_THEME
-
   validates_presence_of :name
   validates :theme, inclusion: { in: THEMES }
 
-  has_many :product_categories
-  has_many :products
-  has_many :tables
-  has_many :users
-  has_many :floor_zones
+  has_many :product_categories, dependent: :destroy
+  has_many :products, dependent: :destroy
+  has_many :tables, dependent: :destroy
+  has_many :users, dependent: :destroy
+  has_many :floor_zones, dependent: :destroy
 end

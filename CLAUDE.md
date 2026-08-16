@@ -5,8 +5,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
-bin/setup                  # Install dependencies and start dev server
+bin/setup                  # Install dependencies, prepare the DB, and start dev server
 bin/dev                    # Start development server (rails server)
+bin/rails db:prepare       # Create/migrate the database (idempotent)
+bin/rails db:migrate       # Run pending migrations
 bundle exec rspec          # Run all specs
 bundle exec rspec spec/path/to/spec_file.rb  # Run a single spec file
 bin/rubocop                # Lint (rubocop-rails-omakase style)
@@ -16,11 +18,9 @@ bin/importmap audit        # JS dependency security scan
 
 ## Architecture
 
-**Kinoko** is a restaurant POS (Point of Sale) Rails 8 application backed by **MongoDB via Mongoid** — ActiveRecord is not used at all (it's commented out in `config/application.rb`). All models use `include Mongoid::Document`.
+**Kinoko** is a restaurant POS (Point of Sale) Rails 8 application backed by **PostgreSQL via ActiveRecord**. Primary keys are UUIDs (`gen_random_uuid()`, native on Postgres 13+ — no `pgcrypto` extension needed). Status/role fields use native ActiveRecord `enum`.
 
-All Mongo documentation is found [here](https://www.mongodb.com/docs/)
-
-**Key gems:** Devise (auth), Pundit (authorization), money-rails (Money type on price fields), Hotwire (Turbo + Stimulus), importmap-rails, Propshaft (asset pipeline).
+**Key gems:** Devise (auth), Pundit (authorization), money-rails (`monetize` on `*_cents` columns), strong_migrations (guards unsafe migrations), Hotwire (Turbo + Stimulus), importmap-rails, Propshaft (asset pipeline).
 
 ### Multi-tenancy
 
@@ -84,7 +84,8 @@ Order → Checks (subtotal/tax/tip: Money, status: open/paid)
 
 ## Conventions & Constraints
 
-- Do not use ActiveRecord, migrations, or SQL.
+- Generate migrations via the CLI (`bin/rails generate migration ...`), never hand-write a migration file from scratch. Declare foreign keys inline inside `create_table` (`t.references ..., foreign_key: true`) — `strong_migrations` does not exempt standalone `add_foreign_key` calls the way it exempts `add_index` on new tables.
+- `strong_migrations` runs on every migration (`StrongMigrations.start_after = 0` in `config/initializers/strong_migrations.rb`) — follow the safe-migration pattern it suggests rather than bypassing it.
 - All queries must be scoped to the current Commerce as this would be a security risk.
 - Avoid changing denormalized data structures (e.g. OrderItem fields).
 - Prefer Turbo + Stimulus over custom JavaScript frameworks.

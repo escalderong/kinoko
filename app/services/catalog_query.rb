@@ -12,20 +12,26 @@ class CatalogQuery
   end
 
   def visible_entries
-    # .includes batches each association into one `$in` query instead of one
-    # query per product per group — MongoDB has no SQL-style join, this is
-    # the Mongoid-idiomatic way to avoid N+1 across referenced (non-embedded)
-    # collections.
-    products_by_category = commerce.products.where(is_active: true)
-      .includes(variant_groups: :variants, modifier_groups: :modifiers)
-      .asc(:name).to_a.group_by(&:product_category_id)
-
-    commerce.product_categories.asc(:name).to_a
-      .map { |category| Entry.new(category: category, products: products_by_category[category.id] || []) }
-      .select { |entry| entry.products.present? }
+    Rails.cache.fetch(cache_key) { fetch_visible_entries }
   end
 
   private
 
   attr_reader :commerce
+
+  def cache_key
+    [ "catalog_query/visible_entries", commerce.id, commerce.updated_at.to_i ]
+  end
+
+  def fetch_visible_entries
+    # .includes here preloads variant_groups/variants and modifier_groups/
+    # modifiers in a handful of queries instead of N+1 per product.
+    products_by_category = commerce.products.where(is_active: true)
+      .includes(variant_groups: :variants, modifier_groups: :modifiers)
+      .order(:name).to_a.group_by(&:product_category_id)
+
+    commerce.product_categories.order(:name).to_a
+      .map { |category| Entry.new(category: category, products: products_by_category[category.id] || []) }
+      .select { |entry| entry.products.present? }
+  end
 end

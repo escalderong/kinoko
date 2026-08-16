@@ -32,10 +32,10 @@ RSpec.describe "App::Settings::FloorZones", type: :request do
         sign_in user
 
         post "/app/settings/floor_zones", params: { floor_zone: { name: "Patio" } }
-        first_zone = FloorZone.last
+        first_zone = FloorZone.find_by!(name: "Patio")
 
         post "/app/settings/floor_zones", params: { floor_zone: { name: "Salon" } }
-        second_zone = FloorZone.last
+        second_zone = FloorZone.find_by!(name: "Salon")
 
         expect(second_zone.position).to be > first_zone.position
       end
@@ -98,6 +98,23 @@ RSpec.describe "App::Settings::FloorZones", type: :request do
         delete "/app/settings/floor_zones/#{foreign_zone.id}"
 
         expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "when a table in the zone has orders" do
+      it "does not destroy the zone and flashes an error instead of failing silently" do
+        user = create(:user)
+        sign_in user
+        zone = create(:floor_zone, commerce: user.commerce)
+        table = create(:table, commerce: user.commerce, floor_zone: zone)
+        create(:order, table: table)
+
+        expect do
+          delete "/app/settings/floor_zones/#{zone.id}"
+        end.not_to change { FloorZone.count }
+
+        expect(response).to redirect_to(app_settings_tables_path)
+        expect(flash[:error]).to eq(I18n.t("activerecord.errors.messages.cannot_destroy_dependent_records"))
       end
     end
   end

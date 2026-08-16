@@ -1,13 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe Commerce, type: :model do
-  it { is_expected.to have_field(:name).of_type(String) }
-  it { is_expected.to have_field(:theme).of_type(String) }
-
-  it { is_expected.to have_many(:product_categories) }
-  it { is_expected.to have_many(:tables) }
-  it { is_expected.to have_many(:users) }
-  it { is_expected.to have_many(:floor_zones) }
+  it { is_expected.to have_many(:product_categories).dependent(:destroy) }
+  it { is_expected.to have_many(:products).dependent(:destroy) }
+  it { is_expected.to have_many(:tables).dependent(:destroy) }
+  it { is_expected.to have_many(:users).dependent(:destroy) }
+  it { is_expected.to have_many(:floor_zones).dependent(:destroy) }
 
   it { is_expected.to validate_presence_of(:name) }
 
@@ -22,6 +20,18 @@ RSpec.describe Commerce, type: :model do
       css_themes = declared.split(',').map { |token| token.strip.split(/\s+/).first }
 
       expect(css_themes).to match_array(Commerce::THEMES)
+    end
+  end
+
+  describe '#destroy' do
+    it 'fails with a populated error instead of silently no-oping when a dependent: :destroy cascade hits a restrict_with_error descendant' do
+      commerce = create(:commerce)
+      category = create(:product_category, commerce: commerce)
+      create(:product, commerce: commerce, product_category: category)
+
+      expect(commerce.destroy).to be false
+      expect(commerce.errors.full_messages).to be_present
+      expect(Commerce.exists?(commerce.id)).to be true
     end
   end
 

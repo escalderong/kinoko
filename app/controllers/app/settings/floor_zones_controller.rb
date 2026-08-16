@@ -4,7 +4,7 @@ module App
       def create
         @floor_zone = current_commerce.floor_zones.new(floor_zone_params)
         authorize @floor_zone
-        @floor_zone.position = (current_commerce.floor_zones.max(:position) || -1) + 1
+        @floor_zone.position = (current_commerce.floor_zones.maximum(:position) || -1) + 1
 
         if @floor_zone.save
           redirect_to app_settings_tables_path(zone: @floor_zone.id)
@@ -23,8 +23,8 @@ module App
       def destroy
         @floor_zone = current_commerce.floor_zones.find(params[:id])
         authorize @floor_zone
-        @floor_zone.destroy
-        redirect_to app_settings_tables_path
+
+        destroy_with_flash(@floor_zone, app_settings_tables_path)
       end
 
       private

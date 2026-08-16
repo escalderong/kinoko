@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe CheckItem, type: :model do
-  it { is_expected.to have_field(:quantity).of_type(Integer) }
-
   it { is_expected.to belong_to(:check) }
   it { is_expected.to belong_to(:order_item) }
 

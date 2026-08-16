@@ -29,6 +29,10 @@
 
 es:
   hello: "Hola mundo"
+  activerecord:
+    errors:
+      messages:
+        cannot_destroy_dependent_records: "No se puede eliminar porque aún existen algunos de sus registros dependientes."
   app:
     coming_soon: "Esta sección estará disponible próximamente."
     nav:

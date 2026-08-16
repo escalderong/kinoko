@@ -1,13 +1,7 @@
-class OrderItem
-  include Mongoid::Document
-  include Mongoid::Timestamps
+class OrderItem < ApplicationRecord
   include TableBroadcaster
 
-  field :base_price, type: Money
-  field :fired_at, type: DateTime
-  field :product_name, type: String
-  field :quantity, type: Integer
-  field :notes, type: String
+  monetize :base_price_cents, allow_nil: true
 
   validates_presence_of :base_price
   validates_presence_of :product_name
@@ -16,9 +10,9 @@ class OrderItem
 
   belongs_to :order, optional: false
 
-  has_many :order_item_variants
-  has_many :order_item_modifiers
-  has_many :check_items
+  has_many :order_item_variants, dependent: :destroy
+  has_many :order_item_modifiers, dependent: :destroy
+  has_many :check_items, dependent: :destroy
 
   after_create :broadcast_table
   after_destroy :broadcast_table

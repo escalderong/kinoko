@@ -1,16 +1,10 @@
-class Modifier
-  include Mongoid::Document
-  include Mongoid::Timestamps
-
-  field :name, type: String
-
-  field :price_delta, type: Money, default: Money.new(0, "COP")
-  field :is_active, type: Boolean, default: true
+class Modifier < ApplicationRecord
+  monetize :price_delta_cents
 
   validates_presence_of :name
   validate :price_delta_within_base_price
 
-  belongs_to :modifier_group, optional: false
+  belongs_to :modifier_group, optional: false, touch: true
 
   private
 

@@ -3,7 +3,7 @@ module App
     class TablesController < App::BaseController
       def index
         authorize Table
-        @zones = policy_scope(FloorZone).asc(:position).to_a
+        @zones = policy_scope(FloorZone).order(:position).to_a
         @tables_by_zone = policy_scope(Table).to_a.group_by(&:floor_zone_id)
         @active_zone = @zones.find { |zone| zone.id.to_s == params[:zone].to_s } || @zones.first
       end
@@ -40,8 +40,8 @@ module App
       def destroy
         @table = current_commerce.tables.find(params[:id])
         authorize @table
-        @table.destroy
-        redirect_to app_settings_tables_path(zone: @table.floor_zone_id)
+
+        destroy_with_flash(@table, app_settings_tables_path(zone: @table.floor_zone_id))
       end
 
       private

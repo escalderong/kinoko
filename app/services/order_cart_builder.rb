@@ -40,7 +40,7 @@ class OrderCartBuilder
   # product commonly appears in several lines with different selections.
   def load_products
     ids = cart_params.filter_map { |params| params[:product_id] }.map(&:to_s).uniq
-    commerce.products.where(:id.in => ids)
+    commerce.products.where(id: ids)
       .includes(variant_groups: :variants, modifier_groups: :modifiers)
       .index_by { |product| product.id.to_s }
   end
@@ -72,7 +72,7 @@ class OrderCartBuilder
   def resolve_and_validate_variants(product, variant_ids)
     return [] if variant_ids.empty?
 
-    variants = Variant.where(:id.in => variant_ids).to_a
+    variants = Variant.where(id: variant_ids).to_a
     raise InvalidCartError, I18n.t("app.tables.orders.errors.variant_unavailable") if variants.size != variant_ids.size
 
     variants.each do |variant|
@@ -88,7 +88,7 @@ class OrderCartBuilder
   def resolve_and_validate_modifiers(product, modifier_ids)
     return [] if modifier_ids.empty?
 
-    modifiers = Modifier.where(:id.in => modifier_ids).to_a
+    modifiers = Modifier.where(id: modifier_ids).to_a
     raise InvalidCartError, I18n.t("app.tables.orders.errors.modifier_unavailable") if modifiers.size != modifier_ids.size
 
     modifiers.each do |modifier|

@@ -1,32 +1,17 @@
-class Order
-  include Mongoid::Document
-  include Mongoid::Timestamps
-  include SimpleEnum::Mongoid
+class Order < ApplicationRecord
   include TableBroadcaster
 
-  field :opened_at, type: DateTime
-  field :closed_at, type: DateTime
+  enum :status, { open: 1, closed: 2 }, default: :open
 
-  as_enum :status, { open: 1, closed: 2 }, field: { default: 1 }
-
-  scope :open, -> { where(status_cd: statuses[:open]) }
+  # One-open-order-per-table is enforced by a partial unique index — see db/migrate/*_create_orders.rb.
   scope :open_for, ->(table) { open.where(table_id: table.id) }
-
-  # Enforces "at most one open order per table" atomically at the database
-  # level. The app-level guard (`Order.open_for(table).exists?` in
-  # OrdersController#create) is a TOCTOU race on its own — two requests can
-  # both pass that check before either saves. This partial unique index (only
-  # applies to documents matching status_cd: open) is what actually closes
-  # the race; a second concurrent insert fails with a duplicate-key error,
-  # which the controller catches and turns into the same "already_open" flash.
-  index({ table_id: 1 }, { unique: true, partial_filter_expression: { status_cd: 1 } })
 
   validates_presence_of :opened_at
 
   belongs_to :table, optional: false
 
-  has_many :order_items
-  has_many :checks
+  has_many :order_items, dependent: :destroy
+  has_many :checks, dependent: :destroy
 
   after_create :broadcast_table
   after_destroy :broadcast_table

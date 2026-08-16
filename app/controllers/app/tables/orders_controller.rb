@@ -3,9 +3,6 @@ module App
     class OrdersController < App::BaseController
       include OrderItemPersistence
 
-      DUPLICATE_KEY_ERROR_CODE = 11_000
-      private_constant :DUPLICATE_KEY_ERROR_CODE
-
       def create
         authorize Order
         table = policy_scope(Table).find(params[:table_id])
@@ -39,9 +36,7 @@ module App
 
         order.destroy
         false
-      rescue Mongo::Error::OperationFailure => e
-        raise unless e.code == DUPLICATE_KEY_ERROR_CODE
-
+      rescue ActiveRecord::RecordNotUnique
         # The exists? guard above is a TOCTOU race on its own — two requests
         # can both pass it before either saves. Order's partial unique index
         # is what actually closes the race; this is that race being hit.

@@ -1,14 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe ProductCategory, type: :model do
-  it { is_expected.to have_field(:name).of_type(String) }
-  it { is_expected.to have_field(:icon).of_type(String) }
-
-  it { is_expected.to belong_to(:commerce) }
-  it { is_expected.to have_many(:products) }
+  it { is_expected.to belong_to(:commerce).touch(true) }
+  it { is_expected.to have_many(:products).dependent(:restrict_with_error) }
 
   it { is_expected.to validate_presence_of(:name) }
   it { is_expected.to validate_presence_of(:icon) }
+
+  it { is_expected.to have_db_index([ :commerce_id, :name ]).unique(true) }
 
   it 'is valid with valid attributes' do
     expect(build(:product_category)).to be_valid

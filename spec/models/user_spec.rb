@@ -1,18 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  it { is_expected.to have_field(:email).of_type(String) }
-  it { is_expected.to have_field(:encrypted_password).of_type(String) }
-  it { is_expected.to have_field(:reset_password_token).of_type(String) }
-  it { is_expected.to have_field(:reset_password_sent_at).of_type(Time) }
-  it { is_expected.to have_field(:remember_created_at).of_type(Time) }
-  it { is_expected.to have_field(:name).of_type(String) }
-  it { is_expected.to have_field(:locale).of_type(String) }
-
   it { is_expected.to belong_to(:commerce) }
 
   it { is_expected.to validate_presence_of(:name) }
   it { is_expected.to validate_presence_of(:role) }
+
+  it { is_expected.to define_enum_for(:role).with_values(owner: 0, admin: 1, waiter: 2, cashier: 3) }
 
   it 'is valid with valid attributes' do
     expect(build(:user)).to be_valid

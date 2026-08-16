@@ -1,12 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Variant, type: :model do
-  it { is_expected.to have_field(:name).of_type(String) }
-  it { is_expected.to have_field(:sku).of_type(String) }
-  it { is_expected.to have_field(:price_delta).of_type(Money) }
-  it { is_expected.to have_field(:is_active).of_type(Mongoid::Boolean).with_default_value_of(true) }
-
-  it { is_expected.to belong_to(:variant_group) }
+  it { is_expected.to belong_to(:variant_group).touch(true) }
 
   it { is_expected.to validate_presence_of(:name) }
   it { is_expected.to validate_presence_of(:sku) }

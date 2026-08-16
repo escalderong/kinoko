@@ -1,15 +1,11 @@
-class Check
-  include Mongoid::Document
-  include Mongoid::Timestamps
-  include SimpleEnum::Mongoid
+class Check < ApplicationRecord
+  monetize :subtotal_cents, :tax_cents, :tip_cents
 
-  field :subtotal, type: Money, default: Money.new(0, "COP")
-  field :tax, type: Money, default: Money.new(0, "COP")
-  field :tip, type: Money, default: Money.new(0, "COP")
-
-  as_enum :status, { open: 1, paid: 2 }
+  enum :status, { open: 1, paid: 2 }, default: :open
 
   belongs_to :order, optional: false
+
+  has_many :check_items, dependent: :destroy
 
   def total
     subtotal + tax + tip

@@ -1,12 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe Order, type: :model do
-  it { is_expected.to have_field(:opened_at).of_type(DateTime) }
-  it { is_expected.to have_field(:closed_at).of_type(DateTime) }
-
   it { is_expected.to belong_to(:table) }
-  it { is_expected.to have_many(:order_items) }
-  it { is_expected.to have_many(:checks) }
+  it { is_expected.to have_many(:order_items).dependent(:destroy) }
+  it { is_expected.to have_many(:checks).dependent(:destroy) }
 
   it { is_expected.to validate_presence_of(:opened_at) }
 
@@ -15,6 +12,8 @@ RSpec.describe Order, type: :model do
   end
 
   describe 'status enum' do
+    it { is_expected.to define_enum_for(:status).with_values(open: 1, closed: 2) }
+
     it 'defaults to open' do
       order = described_class.new
       expect(order.open?).to be true
@@ -24,6 +23,14 @@ RSpec.describe Order, type: :model do
       order = build(:order, status: :closed)
       expect(order.closed?).to be true
       expect(order.open?).to be false
+    end
+
+    it 'pins the open value to 1, matching the partial unique index\'s where: "status = 1" clause' do
+      # The orders migration's partial unique index hardcodes `where: "status = 1"`
+      # to enforce one open order per table. If this enum is ever renumbered,
+      # the index would silently stop matching open orders instead of failing
+      # loudly, so this spec exists to catch that renumbering immediately.
+      expect(Order.statuses[:open]).to eq(1)
     end
   end
 
@@ -61,7 +68,7 @@ RSpec.describe Order, type: :model do
 
       expect do
         described_class.create!(table: table, opened_at: Time.current)
-      end.to raise_error(Mongo::Error::OperationFailure, /E11000/)
+      end.to raise_error(ActiveRecord::RecordNotUnique)
     end
 
     it 'allows a new open order once the previous one is closed' do

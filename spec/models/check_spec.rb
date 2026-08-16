@@ -1,14 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe Check, type: :model do
-  it { is_expected.to have_field(:subtotal).of_type(Money) }
-  it { is_expected.to have_field(:tax).of_type(Money) }
-  it { is_expected.to have_field(:tip).of_type(Money) }
-
   it { is_expected.to belong_to(:order) }
 
   it 'is valid with valid attributes' do
     expect(build(:check)).to be_valid
+  end
+
+  it 'defaults to open status' do
+    expect(described_class.new.status).to eq('open')
   end
 
   describe 'status enum' do

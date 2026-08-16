@@ -1,16 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe OrderItem, type: :model do
-  it { is_expected.to have_field(:base_price).of_type(Money) }
-  it { is_expected.to have_field(:fired_at).of_type(DateTime) }
-  it { is_expected.to have_field(:product_name).of_type(String) }
-  it { is_expected.to have_field(:quantity).of_type(Integer) }
-  it { is_expected.to have_field(:notes).of_type(String) }
-
   it { is_expected.to belong_to(:order) }
-  it { is_expected.to have_many(:order_item_variants) }
-  it { is_expected.to have_many(:order_item_modifiers) }
-  it { is_expected.to have_many(:check_items) }
+  it { is_expected.to have_many(:order_item_variants).dependent(:destroy) }
+  it { is_expected.to have_many(:order_item_modifiers).dependent(:destroy) }
+  it { is_expected.to have_many(:check_items).dependent(:destroy) }
 
   it { is_expected.to validate_presence_of(:base_price) }
   it { is_expected.to validate_presence_of(:product_name) }

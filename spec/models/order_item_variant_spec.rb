@@ -1,10 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe OrderItemVariant, type: :model do
-  it { is_expected.to have_field(:variant_group_name).of_type(String) }
-  it { is_expected.to have_field(:variant_name).of_type(String) }
-  it { is_expected.to have_field(:price_delta).of_type(Money) }
-
   it { is_expected.to belong_to(:order_item) }
 
   it { is_expected.to validate_presence_of(:variant_group_name) }

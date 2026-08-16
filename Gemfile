@@ -19,7 +19,7 @@ gem "slim-rails"
 # Use Redis adapter to run Action Cable in production
 gem "redis", ">= 4.0.1"
 
-gem "mongoid", "~> 8.0"
+gem "pg", "~> 1.5"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
@@ -77,11 +77,11 @@ end
 group :test do
   gem "capybara"
   gem "selenium-webdriver"
-  gem "mongoid-rspec"
+  gem "shoulda-matchers", "~> 6.0"
 end
 
 gem "foreman", "~> 0.90.0"
 
-gem "simple_enum", "~> 2.3", require: "simple_enum/mongoid"
-
 gem "tailwindcss-rails", "~> 4.4"
+
+gem "strong_migrations"

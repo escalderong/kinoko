@@ -3,8 +3,8 @@ module App
     class ItemsController < App::BaseController
       def index
         authorize Product
-        @categories = policy_scope(ProductCategory).asc(:name).to_a
-        @products_by_category = policy_scope(Product).asc(:name).to_a.group_by(&:product_category_id)
+        @categories = policy_scope(ProductCategory).order(:name).to_a
+        @products_by_category = policy_scope(Product).order(:name).to_a.group_by(&:product_category_id)
         @product = Product.new
       end
 

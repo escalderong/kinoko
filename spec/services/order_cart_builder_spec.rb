@@ -254,7 +254,7 @@ RSpec.describe OrderCartBuilder do
 
     it "raises when the product does not exist" do
       expect do
-        build_cart([ { product_id: BSON::ObjectId.new, variant_ids: [], modifier_ids: [], quantity: 1 } ])
+        build_cart([ { product_id: SecureRandom.uuid, variant_ids: [], modifier_ids: [], quantity: 1 } ])
       end.to raise_error(described_class::InvalidCartError)
     end
   end

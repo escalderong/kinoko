@@ -1,23 +1,20 @@
 require 'rails_helper'
 
 RSpec.describe Table, type: :model do
-  it { is_expected.to have_field(:capacity).of_type(Integer) }
-  it { is_expected.to have_field(:number).of_type(Integer) }
-  it { is_expected.to have_field(:pos_x).of_type(Integer) }
-  it { is_expected.to have_field(:pos_y).of_type(Integer) }
-  it { is_expected.to have_field(:width).of_type(Integer) }
-  it { is_expected.to have_field(:height).of_type(Integer) }
-
   it { is_expected.to belong_to(:commerce) }
   it { is_expected.to belong_to(:floor_zone) }
+  it { is_expected.to have_many(:orders).dependent(:restrict_with_error) }
+
+  it { is_expected.to have_db_index([ :commerce_id, :number ]).unique(true) }
+  it { is_expected.to define_enum_for(:status).with_values(available: 1, reserved: 2, occupied: 3) }
 
   it { is_expected.to validate_presence_of(:number) }
   it { is_expected.to validate_presence_of(:capacity) }
 
-  it { is_expected.to validate_numericality_of(:pos_x).greater_than_or_equal_to(0) }
-  it { is_expected.to validate_numericality_of(:pos_y).greater_than_or_equal_to(0) }
-  it { is_expected.to validate_numericality_of(:width).greater_than_or_equal_to(1) }
-  it { is_expected.to validate_numericality_of(:height).greater_than_or_equal_to(1) }
+  it { is_expected.to validate_numericality_of(:pos_x).is_greater_than_or_equal_to(0) }
+  it { is_expected.to validate_numericality_of(:pos_y).is_greater_than_or_equal_to(0) }
+  it { is_expected.to validate_numericality_of(:width).is_greater_than_or_equal_to(1) }
+  it { is_expected.to validate_numericality_of(:height).is_greater_than_or_equal_to(1) }
 
   it 'is valid with valid attributes' do
     expect(build(:table)).to be_valid

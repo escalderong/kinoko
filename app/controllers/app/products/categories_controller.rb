@@ -3,7 +3,7 @@ module App
     class CategoriesController < App::BaseController
       def index
         authorize ProductCategory
-        @categories = policy_scope(ProductCategory).asc(:name).to_a
+        @categories = policy_scope(ProductCategory).order(:name).to_a
         @category = ProductCategory.new
       end
 
@@ -32,8 +32,8 @@ module App
       def destroy
         @category = current_commerce.product_categories.find(params[:id])
         authorize @category
-        @category.destroy
-        redirect_to app_products_categories_path
+
+        destroy_with_flash(@category, app_products_categories_path)
       end
 
       private

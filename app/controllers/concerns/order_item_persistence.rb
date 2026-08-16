@@ -3,9 +3,9 @@
 # parses the cart JSON payload and persists it as OrderItem records plus
 # their variant/modifier snapshots.
 #
-# Mongoid does not autosave referenced has_many associations, so persistence
-# walks top-down (item, then its variant/modifier snapshots) one record at a
-# time. On any failure, #persist_order_items rolls back only the records
+# ActiveRecord does not autosave has_many associations by default, so
+# persistence walks top-down (item, then its variant/modifier snapshots) one
+# record at a time. On any failure, #persist_order_items rolls back only the records
 # *this call* created — it never touches the order itself or any items that
 # already existed on it. That makes it safe to call against a brand-new,
 # not-yet-persisted-content order (nothing to preserve, so the caller may

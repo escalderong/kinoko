@@ -1,9 +1,4 @@
-class CheckItem
-  include Mongoid::Document
-  include Mongoid::Timestamps
-
-  field :quantity, type: Integer
-
+class CheckItem < ApplicationRecord
   validates :quantity, presence: true, numericality: { greater_than: 0 }
 
   belongs_to :check, optional: false

@@ -1,17 +1,11 @@
-class Variant
-  include Mongoid::Document
-  include Mongoid::Timestamps
-
-  field :name, type: String
-  field :sku, type: String
-  field :price_delta, type: Money, default: Money.new(0, "COP")
-  field :is_active, type: Boolean, default: true
+class Variant < ApplicationRecord
+  monetize :price_delta_cents
 
   validates_presence_of :name
   validates_presence_of :sku
   validate :price_delta_within_base_price
 
-  belongs_to :variant_group, optional: false
+  belongs_to :variant_group, optional: false, touch: true
 
   private
 

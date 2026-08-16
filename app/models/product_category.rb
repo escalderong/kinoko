@@ -1,7 +1,4 @@
-class ProductCategory
-  include Mongoid::Document
-  include Mongoid::Timestamps
-
+class ProductCategory < ApplicationRecord
   # Curated set of Font Awesome solid slugs offered by the category icon picker.
   # This list is the single source of truth for the picker and the inclusion
   # validation. Slugs are rendered by IconsHelper#icon as `fa-solid fa-<slug>`.
@@ -12,15 +9,12 @@ class ProductCategory
     wine-glass martini-glass beer-mug-empty bottle-water blender jar
   ].freeze
 
-  field :name, type: String
-  field :icon, type: String
-
   validates_presence_of :name
   validates_presence_of :icon
-  validates_uniqueness_of :name, scope: :commerce
+  validates :name, uniqueness: { scope: :commerce_id }
   validates :icon, inclusion: { in: ICONS }
 
-  belongs_to :commerce, optional: false
+  belongs_to :commerce, optional: false, touch: true
 
-  has_many :products
+  has_many :products, dependent: :restrict_with_error
 end

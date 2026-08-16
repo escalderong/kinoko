@@ -1,13 +1,7 @@
-class VariantGroup
-  include Mongoid::Document
-  include Mongoid::Timestamps
-
-  field :name, type: String
-  field :is_required, type: Boolean, default: false
-
+class VariantGroup < ApplicationRecord
   validates_presence_of :name
 
-  belongs_to :product, optional: false
+  belongs_to :product, optional: false, touch: true
 
-  has_many :variants
+  has_many :variants, dependent: :destroy
 end
